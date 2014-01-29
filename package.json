@@ -16,6 +16,9 @@
   "directories": {
     "example": "examples"
   },
+  "hardware": {
+    "./examples": false
+  },
   "keywords": [
     "tessel",
     "servo",
