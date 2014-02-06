@@ -37,6 +37,10 @@ servo.once('move', function () {
 ##Events
 
 *  *move, servonumber, degrees*
+  
+##Advanced
+
+In which somebody writes about how to power serious motors etc (probably Eric)
 
 ## License
 
