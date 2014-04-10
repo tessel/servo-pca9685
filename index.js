@@ -37,14 +37,14 @@ util.inherits(ServoController, events.EventEmitter);
 
 ServoController.prototype._readRegister = function (register, next)
 {
-  this.i2c.transfer([register], 1, function (err, data) {
+  this.i2c.transfer(new Buffer([register]), 1, function (err, data) {
     next(err, data[0]);
   });
 }
 
 ServoController.prototype._writeRegister = function (register, data, next)
 {
-  this.i2c.send([register, data], next)
+  this.i2c.send(new Buffer([register, data]), next)
 }
 
 
