@@ -51,7 +51,7 @@ ServoController.prototype._writeRegister = function (register, data, next)
 // sets the driver frequency. freq has units of Hz
 ServoController.prototype.setFrequency = function (freq, next)
 {
-  var prescaleval = (25000000/MAX)/freq - 1;
+  var prescaleval = (25000000 / MAX) / freq - 1;
   var prescale = Math.floor(prescaleval); 
   
   var self = this;
@@ -79,7 +79,7 @@ ServoController.prototype.moveServo = function (idx, val, next)
 
   var servo = this;
   // servo.onconnect(function () {
-    this.setPWM(idx, ((val/180) * (this.high - this.low)) + this.low, next);
+    this.setPWM(idx, ((val / 180) * (this.high - this.low)) + this.low, next);
   // });
 };
 
@@ -100,13 +100,13 @@ ServoController.prototype.setPWM = function (idx, on, next)
   }
 
   var convert_on = 0;
-  var convert_off = Math.floor(MAX/100*on);
+  var convert_off = Math.floor(MAX / 100 * on);
 
   // Queue writes
-  this._writeRegister(LED0_ON_L + (idx-1)*4, convert_on);
-  this._writeRegister(LED0_ON_H + (idx-1)*4, convert_on >> 8);
-  this._writeRegister(LED0_OFF_L + (idx-1)*4, convert_off);
-  this._writeRegister(LED0_OFF_H + (idx-1)*4, convert_off >> 8, next);
+  this._writeRegister(LED0_ON_L + (idx - 1) * 4, convert_on);
+  this._writeRegister(LED0_ON_H + (idx - 1) * 4, convert_on >> 8);
+  this._writeRegister(LED0_OFF_L + (idx - 1) * 4, convert_off);
+  this._writeRegister(LED0_OFF_H + (idx - 1) * 4, convert_off >> 8, next);
 }
 
 function connect (hardware, low, high, next)
