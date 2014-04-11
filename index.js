@@ -194,7 +194,7 @@ ServoController.prototype.moveServo = function (idx, val, next)
   }
 
   if (!self.servoConfigurations[idx]) {
-    self.configureServo(idx, this.low, this.high);
+    self.configureServo(idx, this.low, this.high, null);
   }
 
   var low = this.servoConfigurations[idx][0];
@@ -264,7 +264,7 @@ ServoController.prototype.configureServo = function (index, low, high, next) {
       Callback
   */
   this.servoConfigurations[index] = [low, high];
-  next();
+  next && next();
 }
 
 function connect (hardware, low, high, next)
