@@ -1,11 +1,14 @@
 var tessel = require('tessel');
 var servo = require('../');
 
+var hardware = tessel.port('A');
+
 // Initialize the servo.
 console.log("initalizing");
 
+
 // Port A, servo 1, calibrate min/max PWM of 4-15
-var cs61 = servo.connect(tessel.port('A'), 5, 13);
+var cs61 = servo.connect(hardware, 5, 13);
 
 cs61.on('connected', function () {
   var pos = 0;

@@ -22,13 +22,28 @@ var PRE_SCALE = 0xFE;
  * ServoController
  */
 
-function ServoController (hardware, low, high)
+function ServoController (hardware, low, high, addr2, addr3)
 {
   this.hardware = hardware;
+  this.address = I2C_ADDRESS
 
-  this.i2c = new hardware.I2C(I2C_ADDRESS);
+  //  Enable the outpts
+  hardware.gpio(3).writeSync(0);
+
+  //  Configure I2C address
+  addr2 = addr2 || 0;
+  addr3 = addr3 || 0;
+
+  hardware.gpio(2).writeSync(addr2);
+  hardware.gpio(1).writeSync(addr3);
+
+  this.address |= addr2 << 2;
+  this.address |= addr3 << 3;
+
+  this.i2c = new hardware.I2C(this.address);
   this.i2c.initialize();
 
+  //  PWM bounds
   this.low = low || 5;
   this.high = high || 15;
 }
@@ -44,7 +59,7 @@ ServoController.prototype._readRegister = function (register, next)
 
 ServoController.prototype._writeRegister = function (register, data, next)
 {
-  this.i2c.send(new Buffer([register, data]), next)
+  this.i2c.send(new Buffer([register, data]), next);
 }
 
 
