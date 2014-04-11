@@ -193,6 +193,7 @@ ServoController.prototype.moveServo = function (index, val, next)
     throw "Servos are 1-indexed. Servos can be between 1-16.";
   }
 
+  //  If unconfigured, use the controller's default values
   if (!self.servoConfigurations[index]) {
     self.configureServo(index, this.low, this.high, null);
   }
@@ -214,8 +215,6 @@ ServoController.prototype.moveServo = function (index, val, next)
 //   }
 // };
 
-// servo: 1... 16
-// on: 1...100% of time that the servo is on
 ServoController.prototype.setPWM = function (index, on, next)
 {
   /*
@@ -296,11 +295,6 @@ function connect (hardware, low, high, next)
   return servos;
 }
 
-//
-// Reading
-//
-
-// TODO: fix this
 ServoController.prototype.readServo = function (servo, next) {
   /*
   Read the current position target for the specified servo
@@ -309,33 +303,31 @@ ServoController.prototype.readServo = function (servo, next) {
     servo
       The servo index
     next
-      Callback; gets the current PWM percentage as an arg
+      Callback; gets err, current PWM percentage as args
   */
-
+  if (!this.servoConfigurations[servo]) {
+    next && next(new Error('servo not configured'), null);
+  }
+  
+  var self = this;
   var registers = [LED0_ON_L + (servo - 1) * 4, 
     LED0_ON_H + (servo - 1) * 4, 
     LED0_OFF_L + (servo - 1) * 4,
     LED0_OFF_H + (servo - 1) * 4];
-  this._chainRead(registers, function(replies) {
+  self._chainRead(registers, function(replies) {
     //  When in the count cycle the pin goes high
     var on = replies[0] + (replies[1] << 8);
     //  When it goes low
     var off = replies[2] + (replies[3] << 8);
     //  Effective duty cycle
     var duty = (off - on) / MAX;
+
+    var low = self.servoConfigurations[servo][0];
+    var high = self.servoConfigurations[servo][1];
+    var specificMaxDuty = (high - low);
+                                                      //  empirically determined
+    next(null, duty / specificMaxDuty - low / specificMaxDuty + 9/4096);
   });
-
-  // var on_low = this._readRegister(LED0_ON_L + (servo - 1) * 4);
-  // var on_high = this._readRegister(LED0_ON_H + (servo - 1) * 4) >> 8;
-  // console.log("on_low: ", on_low, " on_high: ", on_high);
-  // var on = on_low + on_high;
-  // var off_low = this._readRegister(LED0_OFF_L + (servo - 1) * 4);
-  // var off_high = this._readRegister(LED0_OFF_H + (servo - 1) * 4) >> 8;
-  // console.log("off_low: ", off_low, " off_high: ", off_high);
-
-  // var off = off_low + off_high; 
-
-  // console.log("Servo: ", servo, " on: ", on, " off: ", off);
 }
 
 

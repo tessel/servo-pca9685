@@ -15,7 +15,9 @@ cs61.on('connected', function () {
   setInterval(function () {
     console.log("Deg rotation:", pos);
     cs61.moveServo(2, pos, function() {
-      cs61.readServo(2);
+      cs61.readServo(2, function(err, duty) {
+        console.log('Read position:\t', duty);
+      });
     });
 
     // Increment by 45 deg
