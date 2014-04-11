@@ -175,13 +175,13 @@ ServoController.prototype.setFrequency = function (freq, next)
   });
 }
 
-ServoController.prototype.moveServo = function (idx, val, next)
+ServoController.prototype.moveServo = function (index, val, next)
 {
   /*
   Set the position of the specified servo
 
   Args
-    idx
+    index
       Index of the servo. NOTE: servos are 1-indexed
     val
       Position to which the the servo is to move. 0-1 of its full scale.
@@ -189,20 +189,20 @@ ServoController.prototype.moveServo = function (idx, val, next)
       Callback
   */
   var self = this;
-  if (idx < 1 || idx > 16) {
+  if (index < 1 || index > 16) {
     throw "Servos are 1-indexed. Servos can be between 1-16.";
   }
 
-  if (!self.servoConfigurations[idx]) {
-    self.configureServo(idx, this.low, this.high, null);
+  if (!self.servoConfigurations[index]) {
+    self.configureServo(index, this.low, this.high, null);
   }
 
-  var low = this.servoConfigurations[idx][0];
-  var high = this.servoConfigurations[idx][1];
+  var low = this.servoConfigurations[index][0];
+  var high = this.servoConfigurations[index][1];
 
   var servo = this;
   // servo.onconnect(function () {
-    this.setPWM(idx, (val * (high - low)) + low, next);
+    this.setPWM(index, (val * (high - low)) + low, next);
   // });
 };
 
@@ -216,13 +216,13 @@ ServoController.prototype.moveServo = function (idx, val, next)
 
 // servo: 1... 16
 // on: 1...100% of time that the servo is on
-ServoController.prototype.setPWM = function (idx, on, next)
+ServoController.prototype.setPWM = function (index, on, next)
 {
   /*
   Set the specified channel's PWM value
 
   Args
-    idx
+    index
       Servo index to set
     on
       PWM value (0-1) for the specified servo
@@ -230,7 +230,7 @@ ServoController.prototype.setPWM = function (idx, on, next)
       Callback
   */
 
-  if (idx < 1 || idx > 16) {
+  if (index < 1 || index > 16) {
     throw "Servos are 1-indexed. Servos can be between 1-16.";
   }
 
@@ -238,10 +238,10 @@ ServoController.prototype.setPWM = function (idx, on, next)
   var convert_off = Math.floor(MAX * on);
 
   // Set up writes
-  var registers = [LED0_ON_L + (idx - 1) * 4, 
-    LED0_ON_H + (idx - 1) * 4, 
-    LED0_OFF_L + (idx - 1) * 4,
-    LED0_OFF_H + (idx - 1) * 4];
+  var registers = [LED0_ON_L + (index - 1) * 4, 
+    LED0_ON_H + (index - 1) * 4, 
+    LED0_OFF_L + (index - 1) * 4,
+    LED0_OFF_H + (index - 1) * 4];
   var data = [convert_on, 
     convert_on >> 8, 
     convert_off, 
