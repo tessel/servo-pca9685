@@ -24,6 +24,21 @@ var PRE_SCALE = 0xFE;
 
 function ServoController (hardware, low, high, addr2, addr3)
 {
+  /*
+  Constructor
+
+  Args
+    hardware
+      Tessel port to use
+    low
+      Minimum PWM value (should be 0-1.0 for best results)
+    high
+      Maximum PWM value (should be low-1.0 for best results)
+    addr2
+      I2C address bit 2
+    addr3
+      I2C address bit 3
+  */
   this.hardware = hardware;
 
   //  Enable the outpts
@@ -53,6 +68,15 @@ util.inherits(ServoController, events.EventEmitter);
 
 ServoController.prototype._readRegister = function (register, next)
 {
+  /*
+  Read from registers on the PCA9685 via I2C
+
+  Args
+    register
+      Register to read
+    next
+      Callback; gets reply byte as its arg
+  */
   this.i2c.transfer(new Buffer([register]), 1, function (err, data) {
     next(err, data[0]);
   });
@@ -60,11 +84,33 @@ ServoController.prototype._readRegister = function (register, next)
 
 ServoController.prototype._writeRegister = function (register, data, next)
 {
-  this.i2c.send(new Buffer([register, data]), next);
+  /*
+  Write to registers on the PCA9685 via I2C
+
+  Args
+    register
+      Register to read
+    data
+      Bytes to send
+    next
+      Callback
+  */
+    this.i2c.send(new Buffer([register, data]), next);
 }
 
 ServoController.prototype._chainWrite = function(registers, data, next)
 {
+  /*
+  Make multiple writes to the PCA9685's registers via I2C
+  
+  Args
+    registers
+      An array of register addresses
+    data
+      Ana array of data payloads
+    next
+      Callback
+  */
   var self = this;
   if (registers.length == 0) {
     next && next();
@@ -76,9 +122,17 @@ ServoController.prototype._chainWrite = function(registers, data, next)
   }
 }
 
-// sets the driver frequency. freq has units of Hz
 ServoController.prototype.setFrequency = function (freq, next)
 {
+  /*
+  Set the PWM frequency for the PCA9685 chip. Note that thi is common to all servos attached to the chip.
+
+  Args
+    freq
+      PWM frequency, in units of Hertz
+    next
+      Callback
+  */
   var prescaleVal = (25000000 / MAX) / freq - 1;
   var prescale = Math.floor(prescaleVal); 
   
@@ -94,6 +148,17 @@ ServoController.prototype.setFrequency = function (freq, next)
 // 0...1.0
 ServoController.prototype.moveServo = function (idx, val, next)
 {
+  /*
+  Set the position of the specified servo
+
+  Args
+    idx
+      Index of the servo. NOTE: servos are 1-indexed
+    val
+      Position to which the the servo is to move. 0-1 of its full scale.
+    next
+      Callback
+  */
   if (idx < 1 || idx > 16) {
     throw "Servos are 1-indexed. Servos can be between 1-16.";
   }
@@ -116,6 +181,18 @@ ServoController.prototype.moveServo = function (idx, val, next)
 // on: 1...100% of time that the servo is on
 ServoController.prototype.setPWM = function (idx, on, next)
 {
+  /*
+  Set the specified channel's PWM value
+
+  Args
+    idx
+      Servo index to set
+    on
+      PWM value (0-1) for the specified servo
+    next
+      Callback
+  */
+
   if (idx < 1 || idx > 16) {
     throw "Servos are 1-indexed. Servos can be between 1-16.";
   }
@@ -137,13 +214,26 @@ ServoController.prototype.setPWM = function (idx, on, next)
 
 function connect (hardware, low, high, next)
 {
+  /*
+  Connect to the Servo Module
+
+  Args
+    hardware
+      Tessel port to use
+    low
+      Minimum PWM value (should be 0-1.0 for best results)
+    high
+      Maximum PWM value (should be low-1.0 for best results)
+    next
+      Callback
+  */
   if (typeof low == 'function') {
     next = low;
     low = null;
   }
 
   var servos = new ServoController(hardware, low, high);
-  servos.setFrequency(50, function () {
+  servos.setFrequency(50, function() {
     servos._connected = true;
     servos.emit('connected');
     next && next();
