@@ -25,12 +25,13 @@ var PRE_SCALE = 0xFE;
 function ServoController (hardware, low, high, addr2, addr3)
 {
   this.hardware = hardware;
-  this.address = I2C_ADDRESS
 
   //  Enable the outpts
   hardware.gpio(3).writeSync(0);
 
   //  Configure I2C address
+  this.address = I2C_ADDRESS;
+
   addr2 = addr2 || 0;
   addr3 = addr3 || 0;
 
