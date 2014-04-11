@@ -63,6 +63,18 @@ ServoController.prototype._writeRegister = function (register, data, next)
   this.i2c.send(new Buffer([register, data]), next);
 }
 
+ServoController.prototype._chainWrite = function(registers, data, next)
+{
+  var self = this;
+  if (registers.length == 0) {
+    next && next();
+  }
+  else {
+    self.i2c.send(new Buffer([registers[0], data[0]]), function() {
+      self._chainWrite(registers.slice(1), data.slice(1), next);
+    });
+  }
+}
 
 // sets the driver frequency. freq has units of Hz
 ServoController.prototype.setFrequency = function (freq, next)
@@ -72,17 +84,10 @@ ServoController.prototype.setFrequency = function (freq, next)
   
   var self = this;
   self._readRegister(MODE1, function (err, oldmode) {
-    // gotta sleep it before we can change the prescale
     var newmode = oldmode | 0x10;
-    self._writeRegister(MODE1, newmode);
-    self._writeRegister(PRE_SCALE, prescale); 
-    self._writeRegister(MODE1, oldmode, function () {
-      // Delay 100ms
-      setTimeout(function () {
-        self._writeRegister(MODE1, 0xa1);
-        next && next();
-      }, 100)
-    });
+    var registers = [MODE1, PRE_SCALE, MODE1, MODE1];
+    var data = [newmode, prescale, oldmode, 0xa1];
+    self._chainWrite(registers, data, next);
   });
 }
 
@@ -117,16 +122,17 @@ ServoController.prototype.setPWM = function (idx, on, next)
 
   var convert_on = 0;
   var convert_off = Math.floor(MAX / 100 * on);
-  var self = this;
 
-  // Queue writes
-  self._writeRegister(LED0_ON_L + (idx - 1) * 4, convert_on, function() {
-    self._writeRegister(LED0_ON_H + (idx - 1) * 4, convert_on >> 8, function() {
-      self._writeRegister(LED0_OFF_L + (idx - 1) * 4, convert_off, function() {
-        self._writeRegister(LED0_OFF_H + (idx - 1) * 4, convert_off >> 8, next);
-      });
-    });
-  });
+  // Set up writes
+  var registers = [LED0_ON_L + (idx - 1) * 4, 
+    LED0_ON_H + (idx - 1) * 4, 
+    LED0_OFF_L + (idx - 1) * 4,
+    LED0_OFF_H + (idx - 1) * 4];
+  var data = [convert_on, 
+    convert_on >> 8, 
+    convert_off, 
+    convert_off >> 8];
+  this._chainWrite(registers, data, next);
 }
 
 function connect (hardware, low, high, next)
@@ -139,8 +145,8 @@ function connect (hardware, low, high, next)
   var servos = new ServoController(hardware, low, high);
   servos.setFrequency(50, function () {
     servos._connected = true;
-    next && next();
     servos.emit('connected');
+    next && next();
   });
   return servos;
 }
