@@ -40,6 +40,11 @@ function ServoController (hardware, low, high, addr2, addr3)
       I2C address bit 3
   */
   this.hardware = hardware;
+  this.low = low || 0.05;
+  if (low === 0) {
+    this.low = 0;
+  }
+  this.high = high || 0.15;
 
   //  Enable the outpts
   hardware.gpio(3).writeSync(0);
@@ -59,12 +64,8 @@ function ServoController (hardware, low, high, addr2, addr3)
   this.i2c = new hardware.I2C(this.address);
   this.i2c.initialize();
 
-  //  PWM bounds
-  this.low = low || 0.05;
-  if (low === 0) {
-    this.low = 0;
-  }
-  this.high = high || 0.15;
+  //  Store PWM settings for each servo individually
+  this.servoConfigurations = {};
 }
 
 util.inherits(ServoController, events.EventEmitter);
@@ -174,7 +175,6 @@ ServoController.prototype.setFrequency = function (freq, next)
   });
 }
 
-// 0...1.0
 ServoController.prototype.moveServo = function (idx, val, next)
 {
   /*
@@ -188,13 +188,21 @@ ServoController.prototype.moveServo = function (idx, val, next)
     next
       Callback
   */
+  var self = this;
   if (idx < 1 || idx > 16) {
     throw "Servos are 1-indexed. Servos can be between 1-16.";
   }
 
+  if (!self.servoConfigurations[idx]) {
+    self.configureServo(idx, this.low, this.high);
+  }
+
+  var low = this.servoConfigurations[idx][0];
+  var high = this.servoConfigurations[idx][1];
+
   var servo = this;
   // servo.onconnect(function () {
-    this.setPWM(idx, (val * (this.high - this.low)) + this.low, next);
+    this.setPWM(idx, (val * (high - low)) + low, next);
   // });
 };
 
@@ -239,6 +247,24 @@ ServoController.prototype.setPWM = function (idx, on, next)
     convert_off, 
     convert_off >> 8];
   this._chainWrite(registers, data, next);
+}
+
+ServoController.prototype.configureServo = function (index, low, high, next) {
+  /*
+  Set the PWM max and min for the specified servo
+
+  Args
+    index
+      Servo to configure
+    low
+      PWM lower bound (value for moveServo(index, 0))
+    high
+      PWM upper bound (value for moveServo(index, 1))
+    next
+      Callback
+  */
+  this.servoConfigurations[index] = [low, high];
+  next();
 }
 
 function connect (hardware, low, high, next)
