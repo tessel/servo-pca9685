@@ -117,12 +117,16 @@ ServoController.prototype.setPWM = function (idx, on, next)
 
   var convert_on = 0;
   var convert_off = Math.floor(MAX / 100 * on);
+  var self = this;
 
   // Queue writes
-  this._writeRegister(LED0_ON_L + (idx - 1) * 4, convert_on);
-  this._writeRegister(LED0_ON_H + (idx - 1) * 4, convert_on >> 8);
-  this._writeRegister(LED0_OFF_L + (idx - 1) * 4, convert_off);
-  this._writeRegister(LED0_OFF_H + (idx - 1) * 4, convert_off >> 8, next);
+  self._writeRegister(LED0_ON_L + (idx - 1) * 4, convert_on, function() {
+    self._writeRegister(LED0_ON_H + (idx - 1) * 4, convert_on >> 8, function() {
+      self._writeRegister(LED0_OFF_L + (idx - 1) * 4, convert_off, function() {
+        self._writeRegister(LED0_OFF_H + (idx - 1) * 4, convert_off >> 8, next);
+      });
+    });
+  });
 }
 
 function connect (hardware, low, high, next)
