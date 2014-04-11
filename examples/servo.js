@@ -14,13 +14,14 @@ cs61.on('connected', function () {
   var pos = 0;
   setInterval(function () {
     console.log("Deg rotation:", pos);
-    cs61.moveServo(2, pos);
-    cs61.readServo(2);
+    cs61.moveServo(2, pos, function() {
+      cs61.readServo(2);
+    });
 
     // Increment by 45 deg
-    pos += 0.01;
+    pos += 0.1;
     if (pos > 1) {
       pos = 0;
     }
-  }, 300);
+  }, 2000);
 });

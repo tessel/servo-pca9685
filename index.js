@@ -85,25 +85,28 @@ ServoController.prototype._readRegister = function (register, next)
   });
 }
 
-ServoController.prototype._chainRead = function (registers, replies, next) {
+ServoController.prototype._chainRead = function (registers, next, replies) {
   /*
   Read from the given registers on the PCA9685 via I2C and pass thier replies to the callback
 
   Args
     registers
       An array of registers to read
-    replies
-      An array filled with the replies
     next
       Callback; gets an array of reply bytes as an arg
+    replies
+      An array to which the replies will be pushed
   */
+  var replies = replies || [];
   var self = this;
   if (registers.length == 0) {
+    console.log('replies:\t', replies)
     next && next(replies);
   }
   else {
-    self.i2c.send(new Buffer([registers[0]]), function(data) {
-      self._chainRead(registers.slice(1), replies.push(data[0]), next);
+    self.i2c.transfer(new Buffer([registers[0]]), 1, function(err, data) {
+      replies.push(data[0]);
+      self._chainRead(registers.slice(1), next, replies);
     });
   }
 }
@@ -272,18 +275,41 @@ function connect (hardware, low, high, next)
 //
 
 // TODO: fix this
-ServoController.prototype.readServo = function (servo) {
-  var on_low = this._readRegister(LED0_ON_L + (servo - 1) * 4);
-  var on_high = this._readRegister(LED0_ON_H + (servo - 1) * 4) >> 8;
-  console.log("on_low: ", on_low, " on_high: ", on_high);
-  var on = on_low + on_high;
-  var off_low = this._readRegister(LED0_OFF_L + (servo - 1) * 4);
-  var off_high = this._readRegister(LED0_OFF_H + (servo - 1) * 4) >> 8;
-  console.log("off_low: ", off_low, " off_high: ", off_high);
+ServoController.prototype.readServo = function (servo, next) {
+  /*
+  Read the current position target for the specified servo
 
-  var off = off_low + off_high; 
+  Args
+    servo
+      The servo index
+    next
+      Callback; gets the current PWM percentage as an arg
+  */
 
-  console.log("Servo: ", servo, " on: ", on, " off: ", off);
+  var registers = [LED0_ON_L + (servo - 1) * 4, 
+    LED0_ON_H + (servo - 1) * 4, 
+    LED0_OFF_L + (servo - 1) * 4,
+    LED0_OFF_H + (servo - 1) * 4];
+  this._chainRead(registers, function(replies) {
+    //  When in the count cycle the pin goes high
+    var on = replies[0] + (replies[1] << 8);
+    //  When it goes low
+    var off = replies[2] + (replies[3] << 8);
+    //  Effective duty cycle
+    var duty = (off - on) / MAX;
+  });
+
+  // var on_low = this._readRegister(LED0_ON_L + (servo - 1) * 4);
+  // var on_high = this._readRegister(LED0_ON_H + (servo - 1) * 4) >> 8;
+  // console.log("on_low: ", on_low, " on_high: ", on_high);
+  // var on = on_low + on_high;
+  // var off_low = this._readRegister(LED0_OFF_L + (servo - 1) * 4);
+  // var off_high = this._readRegister(LED0_OFF_H + (servo - 1) * 4) >> 8;
+  // console.log("off_low: ", off_low, " off_high: ", off_high);
+
+  // var off = off_low + off_high; 
+
+  // console.log("Servo: ", servo, " on: ", on, " off: ", off);
 }
 
 
