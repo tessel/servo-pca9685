@@ -5,10 +5,7 @@
 var events = require('events');
 var util = require('util');
 
-//
 // I2C Configuration
-//
-
 var I2C_ADDRESS = 0x73;
 var LED0_ON_L = 0x06;
 var LED0_ON_H = 0x07;
@@ -18,9 +15,6 @@ var MAX = 4096;
 var MODE1 = 0x0;
 var PRE_SCALE = 0xFE;
 
-/**
- * ServoController
- */
 
 function ServoController (hardware, low, high, addr2, addr3)
 {
@@ -96,16 +90,18 @@ ServoController.prototype._chainRead = function (registers, next, replies) {
     next
       Callback; gets an array of reply bytes as an arg
     replies
-      An array to which the replies will be pushed
+      An array to which err, replies will be pushed
   */
   var replies = replies || [];
   var self = this;
   if (registers.length == 0) {
-    console.log('replies:\t', replies)
-    next && next(replies);
+    next && next(null, replies);
   }
   else {
     self.i2c.transfer(new Buffer([registers[0]]), 1, function(err, data) {
+      if (err) {
+        next && next(err, replies);
+      }
       replies.push(data[0]);
       self._chainRead(registers.slice(1), next, replies);
     });
@@ -125,7 +121,7 @@ ServoController.prototype._writeRegister = function (register, data, next)
     next
       Callback
   */
-    this.i2c.send(new Buffer([register, data]), next);
+  this.i2c.send(new Buffer([register, data]), next);
 }
 
 ServoController.prototype._chainWrite = function(registers, data, next)
@@ -168,6 +164,9 @@ ServoController.prototype.setFrequency = function (freq, next)
   
   var self = this;
   self._readRegister(MODE1, function (err, oldMode) {
+    if (err) {
+      next && next(err, null);
+    }
     var newMode = oldMode | 0x10;
     var registers = [MODE1, PRE_SCALE, MODE1, MODE1];
     var data = [newMode, prescale, oldMode, 0xa1];
@@ -202,18 +201,8 @@ ServoController.prototype.moveServo = function (index, val, next)
   var high = this.servoConfigurations[index][1];
 
   var servo = this;
-  // servo.onconnect(function () {
-    this.setPWM(index, (val * (high - low)) + low, next);
-  // });
+  this.setPWM(index, (val * (high - low)) + low, next);
 };
-
-// Servo.prototype.onconnect = function (fn) {
-//   if (!this._connected) {
-//     this.on('connect', fn);
-//   } else {
-//     fn();
-//   }
-// };
 
 ServoController.prototype.setPWM = function (index, on, next)
 {
@@ -308,13 +297,13 @@ ServoController.prototype.readServo = function (servo, next) {
   if (!this.servoConfigurations[servo]) {
     next && next(new Error('servo not configured'), null);
   }
-  
+
   var self = this;
   var registers = [LED0_ON_L + (servo - 1) * 4, 
     LED0_ON_H + (servo - 1) * 4, 
     LED0_OFF_L + (servo - 1) * 4,
     LED0_OFF_H + (servo - 1) * 4];
-  self._chainRead(registers, function(replies) {
+  self._chainRead(registers, function(err, replies) {
     //  When in the count cycle the pin goes high
     var on = replies[0] + (replies[1] << 8);
     //  When it goes low
@@ -326,14 +315,10 @@ ServoController.prototype.readServo = function (servo, next) {
     var high = self.servoConfigurations[servo][1];
     var specificMaxDuty = (high - low);
                                                       //  empirically determined
-    next(null, duty / specificMaxDuty - low / specificMaxDuty + 9/4096);
+    next(null, duty / specificMaxDuty - low / specificMaxDuty + 9 / 4096);
   });
 }
 
-
-/**
- * Public API
- */
 
 exports.connect = connect;
 exports.ServoController = ServoController;

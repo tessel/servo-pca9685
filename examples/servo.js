@@ -4,7 +4,7 @@ var servo = require('../');
 var hardware = tessel.port('A');
 
 // Initialize the servo.
-console.log("initalizing");
+console.log("Initalizing...");
 
 
 // Port A, servo 1, calibrate min/max PWM of 4-15
@@ -20,7 +20,7 @@ cs61.on('connected', function () {
       });
     });
 
-    // Increment by 45 deg
+    // Increment by 10% (~18 deg for a normal servo)
     pos += 0.1;
     if (pos > 1) {
       pos = 0;
