@@ -79,14 +79,14 @@ ServoController.prototype._chainWrite = function(registers, data, next)
 // sets the driver frequency. freq has units of Hz
 ServoController.prototype.setFrequency = function (freq, next)
 {
-  var prescaleval = (25000000 / MAX) / freq - 1;
-  var prescale = Math.floor(prescaleval); 
+  var prescaleVal = (25000000 / MAX) / freq - 1;
+  var prescale = Math.floor(prescaleVal); 
   
   var self = this;
-  self._readRegister(MODE1, function (err, oldmode) {
-    var newmode = oldmode | 0x10;
+  self._readRegister(MODE1, function (err, oldMode) {
+    var newMode = oldMode | 0x10;
     var registers = [MODE1, PRE_SCALE, MODE1, MODE1];
-    var data = [newmode, prescale, oldmode, 0xa1];
+    var data = [newMode, prescale, oldMode, 0xa1];
     self._chainWrite(registers, data, next);
   });
 }
