@@ -45,8 +45,8 @@ function ServoController (hardware, low, high, addr2, addr3)
   this.i2c.initialize();
 
   //  PWM bounds
-  this.low = low || 5;
-  this.high = high || 15;
+  this.low = low || 0.05;
+  this.high = high || 0.15;
 }
 
 util.inherits(ServoController, events.EventEmitter);
@@ -91,7 +91,7 @@ ServoController.prototype.setFrequency = function (freq, next)
   });
 }
 
-// 0...180
+// 0...1.0
 ServoController.prototype.moveServo = function (idx, val, next)
 {
   if (idx < 1 || idx > 16) {
@@ -100,7 +100,7 @@ ServoController.prototype.moveServo = function (idx, val, next)
 
   var servo = this;
   // servo.onconnect(function () {
-    this.setPWM(idx, ((val / 180) * (this.high - this.low)) + this.low, next);
+    this.setPWM(idx, (val * (this.high - this.low)) + this.low, next);
   // });
 };
 

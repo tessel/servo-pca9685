@@ -17,8 +17,8 @@ cs61.on('connected', function () {
     cs61.moveServo(2, pos);
 
     // Increment by 45 deg
-    pos += 10;
-    if (pos > 180) {
+    pos += 0.1;
+    if (pos > 1) {
       pos = 0;
     }
   }, 100);
