@@ -61,6 +61,9 @@ function ServoController (hardware, low, high, addr2, addr3)
 
   //  PWM bounds
   this.low = low || 0.05;
+  if (low === 0) {
+    this.low = 0;
+  }
   this.high = high || 0.15;
 }
 
@@ -78,8 +81,31 @@ ServoController.prototype._readRegister = function (register, next)
       Callback; gets reply byte as its arg
   */
   this.i2c.transfer(new Buffer([register]), 1, function (err, data) {
-    next(err, data[0]);
+    next && next(err, data[0]);
   });
+}
+
+ServoController.prototype._chainRead = function (registers, replies, next) {
+  /*
+  Read from the given registers on the PCA9685 via I2C and pass thier replies to the callback
+
+  Args
+    registers
+      An array of registers to read
+    replies
+      An array filled with the replies
+    next
+      Callback; gets an array of reply bytes as an arg
+  */
+  var self = this;
+  if (registers.length == 0) {
+    next && next(replies);
+  }
+  else {
+    self.i2c.send(new Buffer([registers[0]]), function(data) {
+      self._chainRead(registers.slice(1), replies.push(data[0]), next);
+    });
+  }
 }
 
 ServoController.prototype._writeRegister = function (register, data, next)
@@ -198,7 +224,7 @@ ServoController.prototype.setPWM = function (idx, on, next)
   }
 
   var convert_on = 0;
-  var convert_off = Math.floor(MAX / 100 * on);
+  var convert_off = Math.floor(MAX * on);
 
   // Set up writes
   var registers = [LED0_ON_L + (idx - 1) * 4, 
@@ -246,19 +272,19 @@ function connect (hardware, low, high, next)
 //
 
 // TODO: fix this
-// function read_servo(servo){
-//   var on_low = read_register(LED0_ON_L+(servo-1)*4);
-//   var on_high = read_register(LED0_ON_H+(servo-1)*4)>>8;
-//   console.log("on_low: ", on_low, " on_high: ", on_high);
-//   var on = on_low + on_high;
-//   var off_low = read_register(LED0_OFF_L+(servo-1)*4);
-//   var off_high = read_register(LED0_OFF_H+(servo-1)*4)>>8;
-//   console.log("off_low: ", off_low, " off_high: ", off_high);
+ServoController.prototype.readServo = function (servo) {
+  var on_low = this._readRegister(LED0_ON_L + (servo - 1) * 4);
+  var on_high = this._readRegister(LED0_ON_H + (servo - 1) * 4) >> 8;
+  console.log("on_low: ", on_low, " on_high: ", on_high);
+  var on = on_low + on_high;
+  var off_low = this._readRegister(LED0_OFF_L + (servo - 1) * 4);
+  var off_high = this._readRegister(LED0_OFF_H + (servo - 1) * 4) >> 8;
+  console.log("off_low: ", off_low, " off_high: ", off_high);
 
-//   var off = off_low + off_high;
+  var off = off_low + off_high; 
 
-//   console.log("Servo: ", servo, " on: ", on, " off: ", off);
-// }
+  console.log("Servo: ", servo, " on: ", on, " off: ", off);
+}
 
 
 /**
