@@ -1,6 +1,7 @@
-// address bit is 111xy11 where x is controlled by GPIO2 and y is controlled by GPIO1
-// by default x and y will be 0
-// used http://www.nxp.com/documents/data_sheet/PCA9685.pdf as a reference
+/*
+Tessel servo-pca9685 module
+http://www.nxp.com/documents/data_sheet/PCA9685.pdf
+*/
 
 var events = require('events');
 var util = require('util');
@@ -151,7 +152,7 @@ ServoController.prototype._chainWrite = function(registers, data, next)
 ServoController.prototype.setFrequency = function (freq, next)
 {
   /*
-  Set the PWM frequency for the PCA9685 chip. Note that thi is common to all servos attached to the chip.
+  Set the PWM frequency for the PCA9685 chip. Note that this is common to all servos attached to the chip.
 
   Args
     freq
@@ -187,20 +188,18 @@ ServoController.prototype.moveServo = function (index, val, next)
     next
       Callback
   */
-  var self = this;
   if (index < 1 || index > 16) {
     throw "Servos are 1-indexed. Servos can be between 1-16.";
   }
 
   //  If unconfigured, use the controller's default values
-  if (!self.servoConfigurations[index]) {
-    self.configureServo(index, this.low, this.high, null);
+  if (!this.servoConfigurations[index]) {
+    this.configureServo(index, this.low, this.high, null);
   }
 
   var low = this.servoConfigurations[index][0];
   var high = this.servoConfigurations[index][1];
 
-  var servo = this;
   this.setPWM(index, (val * (high - low)) + low, next);
 };
 
