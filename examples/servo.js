@@ -6,16 +6,17 @@ var hardware = tessel.port('A');
 // Initialize the servo.
 console.log("Initalizing...");
 
+var servoController = servo.connect(hardware);
 
-// Port A, servo 1, calibrate min/max PWM of 4-15
-var cs61 = servo.connect(hardware, 0.03, 0.125);
-
-cs61.on('connected', function () {
-  var pos = 0;
+servoController.on('connected', function () {
+  var pos = 0;  //  Target position of the servo between 0 (min) and 1 (max).
   setInterval(function () {
     console.log("Deg rotation:", pos);
-    cs61.moveServo(2, pos, function() {
-      cs61.readServo(2, function(err, duty) {
+    //  Move servo #2 to position pos.
+    servoController.moveServo(2, pos, function() {
+      //  Read the approximate target positon of servo #2 back from the module. 
+      //  Please refer to the docs if you plan to use this value for something.
+      servoController.readServo(2, function(err, duty) {
         console.log('Read position:\t', duty);
       });
     });
