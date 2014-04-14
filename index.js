@@ -39,6 +39,7 @@ function servoController (hardware, low, high, addr2, addr3)
       I2C address bit 3
   */
   this.hardware = hardware;
+  //  Set default high and low duty cycles for the module
   this.low = low || 0.05;
   if (low === 0) {
     this.low = 0;
@@ -204,19 +205,19 @@ servoController.prototype.setServo = function (index, val, next)
   var low = this.servoConfigurations[index][0];
   var high = this.servoConfigurations[index][1];
 
-  this.setPWM(index, (val * (high - low)) + low, next);
+  this.setDuty(index, (val * (high - low)) + low, next);
 };
 
-servoController.prototype.setPWM = function (index, on, next)
+servoController.prototype.setDuty = function (index, on, next)
 {
   /**
-  Set the specified channel's PWM value
+  Set the specified channel's duty cycle
 
   Args
     index
       Servo index to set
     on
-      PWM value (0-1) for the specified servo
+      Duty cycle (0-1) for the specified servo
     next
       Callback
   */
@@ -274,9 +275,9 @@ function connect (hardware, low, high, next)
     hardware
       Tessel port to use
     low
-      Minimum PWM value (should be 0-1.0 for best results)
+      Minimum duty cycle (0-1.0)
     high
-      Maximum PWM value (should be low-1.0 for best results)
+      Maximum duty cycle (should be between low and 1.0 for best results)
     next
       Callback
   */
