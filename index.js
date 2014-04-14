@@ -336,8 +336,8 @@ servoController.prototype.readServo = function (servo, next) {
     var low = self.servoConfigurations[servo][0];
     var high = self.servoConfigurations[servo][1];
     var specificMaxDuty = (high - low);
-                                                      //  empirically determined
-    next(null, duty / specificMaxDuty - low / specificMaxDuty + 9 / 4096);
+                                        //  empirically determined fudge factors
+    next(null, ((duty - low) / specificMaxDuty + 8 / 4096) * 1023/1024);
   });
 }
 

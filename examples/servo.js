@@ -26,5 +26,5 @@ servoController.on('connected', function () {
     if (pos > 1) {
       pos = 0;
     }
-  }, 2000);
+  }, 500);
 });
