@@ -179,7 +179,7 @@ servoController.prototype.setFrequency = function (freq, next)
   });
 }
 
-servoController.prototype.moveServo = function (index, val, next)
+servoController.prototype.setServo = function (index, val, next)
 {
   /**
   Set the position of the specified servo
@@ -255,9 +255,9 @@ servoController.prototype.configureServo = function (index, low, high, next) {
     index
       Servo to configure
     low
-      PWM lower bound (value for moveServo(index, 0))
+      PWM lower bound (value for setServo(index, 0))
     high
-      PWM upper bound (value for moveServo(index, 1))
+      PWM upper bound (value for setServo(index, 1))
     next
       Callback
   */

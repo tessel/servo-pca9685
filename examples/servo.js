@@ -12,8 +12,8 @@ servoController.on('connected', function () {
   var pos = 0;  //  Target position of the servo between 0 (min) and 1 (max).
   setInterval(function () {
     console.log("Deg rotation:", pos);
-    //  Move servo #2 to position pos.
-    servoController.moveServo(2, pos, function() {
+    //  Set servo #2 to position pos.
+    servoController.setServo(2, pos, function() {
       //  Read the approximate target positon of servo #2 back from the module. 
       //  Please refer to the docs if you plan to use this value for something.
       servoController.readServo(2, function(err, duty) {
