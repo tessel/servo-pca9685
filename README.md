@@ -53,7 +53,9 @@ servo.on('connected', function () {
 Software License Agreement (BSD License)
 
 Copyright (c) 2012, Adafruit Industries
+
 Copyright (c) 2014, Technical Machine
+
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
