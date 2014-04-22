@@ -1,6 +1,6 @@
 /*********************************************
 This servo module demo turns the servo around
-18 degrees every 500ms, then resets it after
+~18 degrees every 500ms, then resets it after
 10 turns, reading out position to the console
 at each movement.
 *********************************************/
@@ -11,12 +11,9 @@ var servo = require('../');
 var hardware = tessel.port('A');
 
 // Initialize the servo.
-console.log("Initalizing...");
+console .log("Initalizing...");
 
 var servoController = servo.use(hardware);
-
-var r = 0x06 + (1 - 1) * 4;
-var a = 1, b = 1;
 
 servoController.on('ready', function () {
   var pos = 0;  //  Target position of the servo between 0 (min) and 1 (max).

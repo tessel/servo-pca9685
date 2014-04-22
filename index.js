@@ -233,8 +233,7 @@ servoController.prototype.setDuty = function (index, on, next)
     LED0_ON_H + (index - 1) * 4, 
     LED0_OFF_L + (index - 1) * 4,
     LED0_OFF_H + (index - 1) * 4];
-  var data = [//registers[0], //  cheating
-    convert_on, 
+  var data = [convert_on, 
     convert_on >> 8, 
     convert_off, 
     convert_off >> 8];
