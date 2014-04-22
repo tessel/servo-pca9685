@@ -6,7 +6,7 @@ at each movement.
 *********************************************/
 
 var tessel = require('tessel');
-var servo = require('servo-pca9685');
+var servo = require('../');
 
 var hardware = tessel.port('A');
 
