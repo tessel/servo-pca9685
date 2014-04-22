@@ -1,5 +1,12 @@
+/*********************************************
+This servo module demo turns the servo around
+18 degrees every 500ms, then resets it after
+10 turns, reading out position to the console
+at each movement.
+*********************************************/
+
 var tessel = require('tessel');
-var servo = require('../');
+var servo = require('servo-pca9685');
 
 var hardware = tessel.port('A');
 
