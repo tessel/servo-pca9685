@@ -44,7 +44,7 @@ function servoController (hardware, low, high, addr2, addr3)
   if (low === 0) {
     this.low = 0;
   }
-  this.high = high || 0.2;
+  this.high = high || 0.17;
 
   //  Enable the outpts
   hardware.gpio(3).writeSync(0);
@@ -233,7 +233,8 @@ servoController.prototype.setDuty = function (index, on, next)
     LED0_ON_H + (index - 1) * 4, 
     LED0_OFF_L + (index - 1) * 4,
     LED0_OFF_H + (index - 1) * 4];
-  var data = [convert_on, 
+  var data = [//registers[0], //  cheating
+    convert_on, 
     convert_on >> 8, 
     convert_off, 
     convert_off >> 8];
