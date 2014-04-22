@@ -1,12 +1,8 @@
 var tessel = require('tessel');
 var servo = require('../');
-console.log('check..')
-
-// Initialize the servo.
-console.log("initalizing");
 
 // Port A, servo 1, calibrate min/max PWM of 4-15
-var cs61 = servo.connect(tessel.port('A'));
+var cs61 = servo.use(tessel.port('A'));
 //Set accelerometer GPIO pins
 var xpin = tessel.port('gpio').analog(0);
 var ypin = tessel.port('gpio').analog(1);
@@ -23,7 +19,7 @@ function changecalc(x, y, z) {
   return ans;
 }
 
-cs61.on('connected', function () {
+cs61.on('ready', function () {
   setInterval(function () {
     //Read accelerometer pins
     var x = readpin(xpin);

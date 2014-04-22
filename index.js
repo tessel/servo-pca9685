@@ -44,7 +44,7 @@ function servoController (hardware, low, high, addr2, addr3)
   if (low === 0) {
     this.low = 0;
   }
-  this.high = high || 0.15;
+  this.high = high || 0.2;
 
   //  Enable the outpts
   hardware.gpio(3).writeSync(0);
@@ -61,8 +61,7 @@ function servoController (hardware, low, high, addr2, addr3)
   this.address |= addr2 << 2;
   this.address |= addr3 << 3;
 
-  this.i2c = new hardware.I2C(this.address);
-  this.i2c.initialize();
+  this.i2c = hardware.I2C(this.address);
 
   //  Store PWM settings for each servo individually
   this.servoConfigurations = {};
@@ -266,7 +265,7 @@ servoController.prototype.configureServo = function (index, low, high, next) {
   next && next();
 }
 
-function connect (hardware, low, high, next)
+function use (hardware, low, high, next)
 {
   /**
   Connect to the Servo Module
@@ -287,10 +286,21 @@ function connect (hardware, low, high, next)
   }
 
   var servos = new servoController(hardware, low, high);
-  servos.setFrequency(50, function() {
-    servos._connected = true;
-    servos.emit('connected');
+  servos.setFrequency(50, function(err) {
+    if (!err) {
+      servos._connected = true;
+      setImmediate(function() {
+        servos.emit('ready');
+      });
+    }
+    else {
+      setImmediate(function() {
+        servos.emit('error');
+      });
+    }
+    
     next && next();
+    
   });
   return servos;
 }
@@ -342,5 +352,5 @@ servoController.prototype.readServo = function (servo, next) {
 }
 
 
-exports.connect = connect;
+exports.use = use;
 exports.servoController = servoController;

@@ -13,9 +13,9 @@ npm install servo-pca9685
 ##Example
 ```js
 var tessel = require('tessel');
-var servo = require('servo-pca9685').connect(tessel.port('A'));
+var servo = require('servo-pca9685').use(tessel.port('A'));
 
-servo.on('connected', function () {
+servo.on('ready', function () {
   setInterval(function () {
     servo.setServo(1, 0, function () {
       setTimeout(function () {
@@ -39,7 +39,8 @@ servo.on('connected', function () {
 
 ##Events
 
-*  *connected*
+*  *ready*
+*  *error*
   
 ##Hardware/Advanced usage
 

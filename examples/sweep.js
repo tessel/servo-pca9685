@@ -1,5 +1,5 @@
 var tessel = require('tessel');
-var servoController = require('../').connect(tessel.port('A'));
+var servoController = require('../').use(tessel.port('A'));
 
 var loop = function() {
   //  Set the position of servo #1 to one side
@@ -14,6 +14,6 @@ var loop = function() {
   })
 }
 
-servoController.on('connected', function () {
+servoController.on('ready', function () {
   loop();
 });

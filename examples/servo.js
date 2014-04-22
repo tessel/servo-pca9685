@@ -13,19 +13,20 @@ var hardware = tessel.port('A');
 // Initialize the servo.
 console.log("Initalizing...");
 
-var servoController = servo.connect(hardware);
+var servoController = servo.use(hardware);
 
-servoController.on('connected', function () {
+servoController.on('ready', function () {
   var pos = 0;  //  Target position of the servo between 0 (min) and 1 (max).
   setInterval(function () {
     console.log("Deg rotation:", pos);
     //  Set servo #1 to position pos.
+    // servoController.configureServo(1, 0.05, 0.125);
     servoController.setServo(1, pos, function() {
       //  Read the approximate target positon of servo #1 back from the module. 
       //  Please refer to the docs if you plan to use this value for something.
-      servoController.readServo(1, function(err, duty) {
-        console.log('Read position:\t', duty);
-      });
+      // servoController.readServo(1, function(err, duty) {
+      //   console.log('Read position:\t', duty);
+      // });
     });
 
     // Increment by 10% (~18 deg for a normal servo)
@@ -33,5 +34,5 @@ servoController.on('connected', function () {
     if (pos > 1) {
       pos = 0;
     }
-  }, 500);
+  }, 1000);
 });
