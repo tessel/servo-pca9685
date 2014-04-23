@@ -20,7 +20,6 @@ var MAX = 4096;
 var MODE1 = 0x0;
 var PRE_SCALE = 0xFE;
 
-
 function servoController (hardware, low, high, addr2, addr3) {
   /**
   Constructor
@@ -79,9 +78,11 @@ servoController.prototype._readRegister = function (register, next) {
       Callback; gets reply byte as its arg
   */
   this.i2c.transfer(new Buffer([register]), 1, function (err, data) {
-    next && next(err, data[0]);
+    if (next) {
+      next(err, data[0]);
+    }
   });
-}
+};
 
 servoController.prototype._chainRead = function (registers, next, replies) {
   /**
@@ -95,21 +96,25 @@ servoController.prototype._chainRead = function (registers, next, replies) {
     replies
       An array to which err, replies will be pushed
   */
-  var replies = replies || [];
+  var replies = replies || [];  // jshint ignore:line
   var self = this;
-  if (registers.length == 0) {
-    next && next(null, replies);
+  if (registers.length === 0) {
+    if (next) {
+      next(null, replies);
+    }
   }
   else {
     self.i2c.transfer(new Buffer([registers[0]]), 1, function(err, data) {
       if (err) {
-        next && next(err, replies);
+        if (next) {
+          next(err, replies);
+        }
       }
       replies.push(data[0]);
       self._chainRead(registers.slice(1), next, replies);
     });
   }
-}
+};
 
 servoController.prototype._writeRegister = function (register, data, next) {
   /**
@@ -124,7 +129,7 @@ servoController.prototype._writeRegister = function (register, data, next) {
       Callback
   */
   this.i2c.send(new Buffer([register, data]), next);
-}
+};
 
 servoController.prototype._chainWrite = function(registers, data, next) {
   /**
@@ -139,15 +144,17 @@ servoController.prototype._chainWrite = function(registers, data, next) {
       Callback
   */
   var self = this;
-  if (registers.length == 0) {
-    next && next();
+  if (registers.length === 0) {
+    if (next) {
+      next();
+    }
   }
   else {
     self.i2c.send(new Buffer([registers[0], data[0]]), function() {
       self._chainWrite(registers.slice(1), data.slice(1), next);
     });
   }
-}
+};
 
 servoController.prototype.setFrequency = function (freq, next) {
   /**
@@ -165,14 +172,16 @@ servoController.prototype.setFrequency = function (freq, next) {
   var self = this;
   self._readRegister(MODE1, function (err, oldMode) {
     if (err) {
-      next && next(err, null);
+      if (next) {
+        next(err, null);
+      }
     }
     var newMode = oldMode | 0x10;
     var registers = [MODE1, PRE_SCALE, MODE1, MODE1];
     var data = [newMode, prescale, oldMode, 0xa1];
     self._chainWrite(registers, data, next);
   });
-}
+};
 
 servoController.prototype.setServo = function (index, val, next) {
   /**
@@ -187,7 +196,7 @@ servoController.prototype.setServo = function (index, val, next) {
       Callback
   */
   if (index < 1 || index > 16) {
-    throw "Servos are 1-indexed. Servos can be between 1-16.";
+    throw 'Servos are 1-indexed. Servos can be between 1-16.';
   }
 
   //  If unconfigured, use the controller's default values
@@ -215,23 +224,23 @@ servoController.prototype.setDuty = function (index, on, next) {
   */
 
   if (index < 1 || index > 16) {
-    throw "Servos are 1-indexed. Servos can be between 1-16.";
+    throw 'Servos are 1-indexed. Servos can be between 1-16.';
   }
 
-  var convert_on = 0;
-  var convert_off = Math.floor(MAX * on);
+  var convertOn = 0;
+  var convertOff = Math.floor(MAX * on);
 
   // Set up writes
   var registers = [LED0_ON_L + (index - 1) * 4, 
     LED0_ON_H + (index - 1) * 4, 
     LED0_OFF_L + (index - 1) * 4,
     LED0_OFF_H + (index - 1) * 4];
-  var data = [convert_on, 
-    convert_on >> 8, 
-    convert_off, 
-    convert_off >> 8];
+  var data = [convertOn, 
+    convertOn >> 8, 
+    convertOff, 
+    convertOff >> 8];
   this._chainWrite(registers, data, next);
-}
+};
 
 servoController.prototype.configureServo = function (index, low, high, next) {
   /**
@@ -255,8 +264,10 @@ servoController.prototype.configureServo = function (index, low, high, next) {
       Callback
   */
   this.servoConfigurations[index] = [low, high];
-  next && next();
-}
+  if (next) {
+    next();
+  }
+};
 
 function use (hardware, low, high, next) {
   /**
@@ -291,8 +302,9 @@ function use (hardware, low, high, next) {
       });
     }
     
-    next && next();
-    
+    if (next) {
+      next();
+    }
   });
   return servos;
 }
@@ -319,7 +331,9 @@ servoController.prototype.readServo = function (servo, next) {
       Callback; gets err, approximate position target as args
   */
   if (!this.servoConfigurations[servo]) {
-    next && next(new Error('servo not configured'), null);
+    if (next) {
+      next(new Error('servo not configured'), null);
+    }
   }
 
   var self = this;
@@ -341,7 +355,7 @@ servoController.prototype.readServo = function (servo, next) {
                                         //  empirically determined fudge factors
     next(null, ((duty - low) / specificMaxDuty + 8 / 4096) * 1023/1024);
   });
-}
+};
 
 
 exports.use = use;
