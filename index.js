@@ -21,8 +21,7 @@ var MODE1 = 0x0;
 var PRE_SCALE = 0xFE;
 
 
-function servoController (hardware, low, high, addr2, addr3)
-{
+function servoController (hardware, low, high, addr2, addr3) {
   /**
   Constructor
 
@@ -69,8 +68,7 @@ function servoController (hardware, low, high, addr2, addr3)
 
 util.inherits(servoController, events.EventEmitter);
 
-servoController.prototype._readRegister = function (register, next)
-{
+servoController.prototype._readRegister = function (register, next) {
   /**
   Read from registers on the PCA9685 via I2C
 
@@ -113,8 +111,7 @@ servoController.prototype._chainRead = function (registers, next, replies) {
   }
 }
 
-servoController.prototype._writeRegister = function (register, data, next)
-{
+servoController.prototype._writeRegister = function (register, data, next) {
   /**
   Write to registers on the PCA9685 via I2C
 
@@ -129,8 +126,7 @@ servoController.prototype._writeRegister = function (register, data, next)
   this.i2c.send(new Buffer([register, data]), next);
 }
 
-servoController.prototype._chainWrite = function(registers, data, next)
-{
+servoController.prototype._chainWrite = function(registers, data, next) {
   /**
   Make multiple writes to the PCA9685's registers via I2C
   
@@ -153,8 +149,7 @@ servoController.prototype._chainWrite = function(registers, data, next)
   }
 }
 
-servoController.prototype.setFrequency = function (freq, next)
-{
+servoController.prototype.setFrequency = function (freq, next) {
   /**
   Set the PWM frequency for the PCA9685 chip.
 
@@ -179,8 +174,7 @@ servoController.prototype.setFrequency = function (freq, next)
   });
 }
 
-servoController.prototype.setServo = function (index, val, next)
-{
+servoController.prototype.setServo = function (index, val, next) {
   /**
   Set the position of the specified servo
 
@@ -207,8 +201,7 @@ servoController.prototype.setServo = function (index, val, next)
   this.setDuty(index, (val * (high - low)) + low, next);
 };
 
-servoController.prototype.setDuty = function (index, on, next)
-{
+servoController.prototype.setDuty = function (index, on, next) {
   /**
   Set the specified channel's duty cycle
 
@@ -265,8 +258,7 @@ servoController.prototype.configureServo = function (index, low, high, next) {
   next && next();
 }
 
-function use (hardware, low, high, next)
-{
+function use (hardware, low, high, next) {
   /**
   Connect to the Servo Module
 
