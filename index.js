@@ -44,7 +44,7 @@ function servoController (hardware, low, high, addr2, addr3)
   if (low === 0) {
     this.low = 0;
   }
-  this.high = high || 0.17;
+  this.high = high || 0.12;
 
   //  Enable the outpts
   hardware.gpio(3).writeSync(0);

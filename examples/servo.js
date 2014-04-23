@@ -17,8 +17,12 @@ var servoController = servo.use(hardware);
 
 servoController.on('ready', function () {
   var pos = 0;  //  Target position of the servo between 0 (min) and 1 (max).
-  //  Set the minimum and maximum duty cycle for servo 1
-  servoController.configureServo(1, 0.015, 0.13, function() {
+  //  Set the minimum and maximum duty cycle for servo 1.
+  servoController.configureServo(1, 0.05, 0.12, function() {
+  //  If the servo doesn't move to its full extent or stalls out
+  //  and gets hot, try tuning these values (0.05 and 0.12). 
+  //  Moving them towards each other = less movement range
+  //  Moving them apart = more range, more likely to stall and burn out
     setInterval(function () {
       console.log("Deg rotation:", pos);
       //  Set servo #1 to position pos.
