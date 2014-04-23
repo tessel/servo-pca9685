@@ -11,7 +11,7 @@ var servo = require('../');
 var hardware = tessel.port('A');
 
 // Initialize the servo.
-console.log("Initalizing...");
+console.log('Initalizing...');
 
 var servoController = servo.use(hardware);
 
@@ -24,7 +24,7 @@ servoController.on('ready', function () {
   //  Moving them towards each other = less movement range
   //  Moving them apart = more range, more likely to stall and burn out
     setInterval(function () {
-      console.log("Deg rotation:", pos);
+      console.log('Deg rotation:', pos);
       //  Set servo #1 to position pos.
       servoController.setServo(1, pos, function () {
         //  Read the approximate target positon of servo #1 back from the module. 
