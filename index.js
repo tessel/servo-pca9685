@@ -153,7 +153,7 @@ servoController.prototype._writeRegister = function (register, data, callback) {
 };
 
 // Sets the PWM max and min for the specified servo
-servoController.prototype.configureServo = function (index, low, high, callback) {
+servoController.prototype.configure = function (index, low, high, callback) {
   /**
   Many hobby servos, motor speed controllers, etc. expect a nominal 20 ms
   period and map duty cycles (% time the signal is high for a given period) of
@@ -195,7 +195,7 @@ servoController.prototype.move = function (index, val, callback) {
 
   //  If unconfigured, use the controller's default values
   if (!this.servoConfigurations[index]) {
-    this.configureServo(index, this.low, this.high, null);
+    this.configure(index, this.low, this.high, null);
   }
 
   var low = this.servoConfigurations[index][0];
@@ -205,13 +205,13 @@ servoController.prototype.move = function (index, val, callback) {
 };
 
 // Reads the current approximate position target for the specified servo
-servoController.prototype.readServo = function (servo, callback) {
+servoController.prototype.read = function (servo, callback) {
   /**
   For each channel on the PCA9685, there are two 12 bit registers that
   correspond to the counter values at which the line is set high and low. This
   function reads these registers, calculates the theoretical duty cycle, and
   then maps it against the range of duty cycles to which the servo is
-  calibrated in ```configureServo```. The ratio of the true duty cycle to the
+  calibrated in ```configure```. The ratio of the true duty cycle to the
   range of configured duty cycles is passed to the callback.
 
   Because this function cannot determine the true position of a physical servo
@@ -283,7 +283,7 @@ servoController.prototype.setDutyCycle = function (index, on, callback) {
 };
 
 // Sets the PWM frequency in Hz for the PCA9685 chip
-servoController.prototype.setFrequency = function (freq, callback) {
+servoController.prototype.setModuleFrequency = function (freq, callback) {
   /**
   Args
     freq
@@ -328,7 +328,7 @@ function use (hardware, low, high, callback) {
   }
 
   var servos = new servoController(hardware, low, high);
-  servos.setFrequency(50, function(err) {
+  servos.setModuleFrequency(50, function(err) {
     if (!err) {
       servos._connected = true;
       setImmediate(function() {
