@@ -72,9 +72,9 @@ servoController.on('ready', function () {
 
 ##Events
 
-*  *ready*
+* *error* Emitted upon error.
 
-*  *error*
+* *ready* Emitted upon first successful communication between the Tessel and the module.
 
 ##Hardware/Advanced usage
 
