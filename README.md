@@ -71,6 +71,11 @@ servoController.on('ready', function () {
 
 * *ready* Emitted upon first successful communication between the Tessel and the module.
 
+##Further Examples
+See the examples folder for code.
+
+* sweep: Move the servo smoothly back and forth.
+
 ##Hardware/Advanced usage
 
 *  The servos used in conjunction with this module should be powered through the 5.5 mm barrel jack.
