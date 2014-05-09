@@ -1,11 +1,11 @@
-/**
-Tessel servo-pca9685 module
-
-References:
-http://www.nxp.com/documents/data_sheet/PCA9685.pdf
-http://en.wikipedia.org/wiki/Servo_control
-https://github.com/adafruit/Adafruit-PWM-Servo-Driver-Library
-*/
+// Copyright 2014 Technical Machine, Inc. See the COPYRIGHT
+// file at the top-level directory of this distribution.
+//
+// Licensed under the Apache License, Version 2.0 <LICENSE-APACHE or
+// http://www.apache.org/licenses/LICENSE-2.0> or the MIT license
+// <LICENSE-MIT or http://opensource.org/licenses/MIT>, at your
+// option. This file may not be copied, modified, or distributed
+// except according to those terms.
 
 var events = require('events');
 var util = require('util');

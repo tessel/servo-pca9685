@@ -1,3 +1,11 @@
+/*********************************************
+This servo module demo moves servo one from
+side to side, sweeping through all values.
+*********************************************/
+
+// Any copyright is dedicated to the Public Domain.
+// http://creativecommons.org/publicdomain/zero/1.0/
+
 var tessel = require('tessel');
 var servo = require('../').use(tessel.port('A'));
 

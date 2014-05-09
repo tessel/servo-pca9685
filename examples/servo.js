@@ -5,6 +5,9 @@ This servo module demo turns the servo around
 at each movement.
 *********************************************/
 
+// Any copyright is dedicated to the Public Domain.
+// http://creativecommons.org/publicdomain/zero/1.0/
+
 var tessel = require('tessel');
 var servo = require('../').use(tessel.port('A'));
 

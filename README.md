@@ -31,6 +31,7 @@ var servoController = servo.use(hardware);
 
 servoController.on('ready', function () {
   var pos = 0;  //  Target position of the servo between 0 (min) and 1 (max).
+
   //  Set the minimum and maximum duty cycle for servo 1.
   //  If the servo doesn't move to its full extent or stalls out
   //  and gets hot, try tuning these values (0.05 and 0.12).
@@ -40,13 +41,7 @@ servoController.on('ready', function () {
     setInterval(function () {
       console.log('Deg rotation:', pos);
       //  Set servo #1 to position pos.
-      servoController.move(1, pos, function () {
-        //  Read the approximate target positon of servo #1 back from the module.
-        //  Please refer to the docs if you plan to use this value for something.
-        // servoController.readServo(1, function(err, duty) {
-        //   console.log('Read position:\t', duty);
-        // });
-      });
+      servoController.move(1, pos);
 
       // Increment by 10% (~18 deg for a normal servo)
       pos += 0.1;
@@ -81,7 +76,7 @@ servoController.on('ready', function () {
 *  The servos used in conjunction with this module should be powered through the 5.5 mm barrel jack.
 *  The physical *module* is marked with "S", "+", and "-". These correspond to signal, power, and GND. On most *servos*, the GND wire will be black/brown and the signal wire will be yellow/white. Red typically denotes 5 V power.
 *  This module can be used to drive most speed controllers, which in turn can control a wide variety of actuators. It can also be used to drive small LEDs with current limiting resistors in series.
-*  The bare square pads by the barrel jack allow the addition of a capacitor to the input power rail if desired. The pad closest to the board edge is connected to GND, the other to the barrel jack's positive pin. This addition is not requred for proper module functionality.
+*  The bare square pads by the barrel jack allow the addition of a capacitor to the input power rail if desired. The pad closest to the board edge is connected to GND, the other to the barrel jack's positive pin. This addition is not required for proper module functionality.
 
 ## License
 MIT
