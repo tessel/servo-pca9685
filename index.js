@@ -67,14 +67,14 @@ function servoController (hardware, low, high, addr2, addr3) {
 
 util.inherits(servoController, events.EventEmitter);
 
-servoController.prototype._chainRead = function (registers, next, replies) {
+servoController.prototype._chainRead = function (registers, callback, replies) {
   /**
   Read from the given registers on the PCA9685 via I2C and pass thier replies to the callback
 
   Args
     registers
       An array of registers to read
-    next
+    callback
       Callback; gets an array of reply bytes as an arg
     replies
       An array to which err, replies will be pushed
@@ -82,24 +82,24 @@ servoController.prototype._chainRead = function (registers, next, replies) {
   var replies = replies || [];  // jshint ignore:line
   var self = this;
   if (registers.length === 0) {
-    if (next) {
-      next(null, replies);
+    if (callback) {
+      callback(null, replies);
     }
   }
   else {
     self.i2c.transfer(new Buffer([registers[0]]), 1, function(err, data) {
       if (err) {
-        if (next) {
-          next(err, replies);
+        if (callback) {
+          callback(err, replies);
         }
       }
       replies.push(data[0]);
-      self._chainRead(registers.slice(1), next, replies);
+      self._chainRead(registers.slice(1), callback, replies);
     });
   }
 };
 
-servoController.prototype._chainWrite = function(registers, data, next) {
+servoController.prototype._chainWrite = function(registers, data, callback) {
   /**
   Make multiple writes to the PCA9685's registers via I2C
 
@@ -108,40 +108,40 @@ servoController.prototype._chainWrite = function(registers, data, next) {
       An array of register addresses
     data
       Ana array of data payloads
-    next
+    callback
       Callback
   */
   var self = this;
   if (registers.length === 0) {
-    if (next) {
-      next();
+    if (callback) {
+      callback();
     }
   }
   else {
     self.i2c.send(new Buffer([registers[0], data[0]]), function() {
-      self._chainWrite(registers.slice(1), data.slice(1), next);
+      self._chainWrite(registers.slice(1), data.slice(1), callback);
     });
   }
 };
 
-servoController.prototype._readRegister = function (register, next) {
+servoController.prototype._readRegister = function (register, callback) {
   /**
   Read from registers on the PCA9685 via I2C
 
   Args
     register
       Register to read
-    next
+    callback
       Callback; gets reply byte as its arg
   */
   this.i2c.transfer(new Buffer([register]), 1, function (err, data) {
-    if (next) {
-      next(err, data[0]);
+    if (callback) {
+      callback(err, data[0]);
     }
   });
 };
 
-servoController.prototype._writeRegister = function (register, data, next) {
+servoController.prototype._writeRegister = function (register, data, callback) {
   /**
   Write to registers on the PCA9685 via I2C
 
@@ -150,13 +150,13 @@ servoController.prototype._writeRegister = function (register, data, next) {
       Register to read
     data
       Bytes to send
-    next
+    callback
       Callback
   */
-  this.i2c.send(new Buffer([register, data]), next);
+  this.i2c.send(new Buffer([register, data]), callback);
 };
 
-servoController.prototype.configureServo = function (index, low, high, next) {
+servoController.prototype.configureServo = function (index, low, high, callback) {
   /**
   Set the PWM max and min for the specified servo.
 
@@ -174,16 +174,16 @@ servoController.prototype.configureServo = function (index, low, high, next) {
       PWM lower bound (value for setServo(index, 0))
     high
       PWM upper bound (value for setServo(index, 1))
-    next
+    callback
       Callback
   */
   this.servoConfigurations[index] = [low, high];
-  if (next) {
-    next();
+  if (callback) {
+    callback();
   }
 };
 
-servoController.prototype.readServo = function (servo, next) {
+servoController.prototype.readServo = function (servo, callback) {
   /**
   Read the current approximate position target for the specified servo.
 
@@ -201,12 +201,12 @@ servoController.prototype.readServo = function (servo, next) {
   Args
     servo
       The servo index
-    next
+    callback
       Callback; gets err, approximate position target as args
   */
   if (!this.servoConfigurations[servo]) {
-    if (next) {
-      next(new Error('servo not configured'), null);
+    if (callback) {
+      callback(new Error('servo not configured'), null);
     }
   }
 
@@ -227,11 +227,11 @@ servoController.prototype.readServo = function (servo, next) {
     var high = self.servoConfigurations[servo][1];
     var specificMaxDuty = (high - low);
                                         //  empirically determined fudge factors
-    next(null, ((duty - low) / specificMaxDuty + 8 / 4096) * 1023/1024);
+    callback(null, ((duty - low) / specificMaxDuty + 8 / 4096) * 1023/1024);
   });
 };
 
-servoController.prototype.setDuty = function (index, on, next) {
+servoController.prototype.setDuty = function (index, on, callback) {
   /**
   Set the specified channel's duty cycle
 
@@ -240,7 +240,7 @@ servoController.prototype.setDuty = function (index, on, next) {
       Servo index to set
     on
       Duty cycle (0-1) for the specified servo
-    next
+    callback
       Callback
   */
 
@@ -260,17 +260,17 @@ servoController.prototype.setDuty = function (index, on, next) {
     convertOn >> 8,
     convertOff,
     convertOff >> 8];
-  this._chainWrite(registers, data, next);
+  this._chainWrite(registers, data, callback);
 };
 
-servoController.prototype.setFrequency = function (freq, next) {
+servoController.prototype.setFrequency = function (freq, callback) {
   /**
   Set the PWM frequency for the PCA9685 chip.
 
   Args
     freq
       PWM frequency, in units of Hertz
-    next
+    callback
       Callback
   */
   var prescaleVal = (25000000 / MAX) / freq - 1;
@@ -279,18 +279,18 @@ servoController.prototype.setFrequency = function (freq, next) {
   var self = this;
   self._readRegister(MODE1, function (err, oldMode) {
     if (err) {
-      if (next) {
-        next(err, null);
+      if (callback) {
+        callback(err, null);
       }
     }
     var newMode = oldMode | 0x10;
     var registers = [MODE1, PRE_SCALE, MODE1, MODE1];
     var data = [newMode, prescale, oldMode, 0xa1];
-    self._chainWrite(registers, data, next);
+    self._chainWrite(registers, data, callback);
   });
 };
 
-servoController.prototype.setServo = function (index, val, next) {
+servoController.prototype.setServo = function (index, val, callback) {
   /**
   Set the position of the specified servo
 
@@ -299,7 +299,7 @@ servoController.prototype.setServo = function (index, val, next) {
       Index of the servo. NOTE: servos are 1-indexed
     val
       Position to which the the servo is to move. 0-1 of its full scale.
-    next
+    callback
       Callback
   */
   if (index < 1 || index > 16) {
@@ -314,10 +314,10 @@ servoController.prototype.setServo = function (index, val, next) {
   var low = this.servoConfigurations[index][0];
   var high = this.servoConfigurations[index][1];
 
-  this.setDuty(index, (val * (high - low)) + low, next);
+  this.setDuty(index, (val * (high - low)) + low, callback);
 };
 
-function use (hardware, low, high, next) {
+function use (hardware, low, high, callback) {
   /**
   Connect to the Servo Module
 
@@ -328,11 +328,11 @@ function use (hardware, low, high, next) {
       Minimum duty cycle (0-1.0)
     high
       Maximum duty cycle (should be between low and 1.0 for best results)
-    next
+    callback
       Callback
   */
   if (typeof low == 'function') {
-    next = low;
+    callback = low;
     low = null;
   }
 
@@ -350,8 +350,8 @@ function use (hardware, low, high, next) {
       });
     }
 
-    if (next) {
-      next();
+    if (callback) {
+      callback();
     }
   });
   return servos;
