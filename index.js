@@ -67,10 +67,9 @@ function servoController (hardware, low, high, addr2, addr3) {
 
 util.inherits(servoController, events.EventEmitter);
 
+// Reads fom the given registers on the PCA9685 via I2C and passes their replies to the callback
 servoController.prototype._chainRead = function (registers, callback, replies) {
   /**
-  Read from the given registers on the PCA9685 via I2C and pass thier replies to the callback
-
   Args
     registers
       An array of registers to read
@@ -99,10 +98,9 @@ servoController.prototype._chainRead = function (registers, callback, replies) {
   }
 };
 
+// Makes multiple writes to the PCA9685's registers via I2C
 servoController.prototype._chainWrite = function(registers, data, callback) {
   /**
-  Make multiple writes to the PCA9685's registers via I2C
-
   Args
     registers
       An array of register addresses
@@ -124,10 +122,9 @@ servoController.prototype._chainWrite = function(registers, data, callback) {
   }
 };
 
+// Reads from registers on the PCA9685 via I2C
 servoController.prototype._readRegister = function (register, callback) {
   /**
-  Read from registers on the PCA9685 via I2C
-
   Args
     register
       Register to read
@@ -141,10 +138,9 @@ servoController.prototype._readRegister = function (register, callback) {
   });
 };
 
+// Writes to registers on the PCA9685 via I2C
 servoController.prototype._writeRegister = function (register, data, callback) {
   /**
-  Write to registers on the PCA9685 via I2C
-
   Args
     register
       Register to read
@@ -156,10 +152,9 @@ servoController.prototype._writeRegister = function (register, data, callback) {
   this.i2c.send(new Buffer([register, data]), callback);
 };
 
+// Sets the PWM max and min for the specified servo
 servoController.prototype.configureServo = function (index, low, high, callback) {
   /**
-  Set the PWM max and min for the specified servo.
-
   Many hobby servos, motor speed controllers, etc. expect a nominal 20 ms
   period and map duty cycles (% time the signal is high for a given period) of
   10% and 20% to minimum and maximum positions, respectively. The protocol is
@@ -171,9 +166,9 @@ servoController.prototype.configureServo = function (index, low, high, callback)
     index
       Servo to configure
     low
-      PWM lower bound (value for setServo(index, 0))
+      PWM lower bound (value for move(index, 0))
     high
-      PWM upper bound (value for setServo(index, 1))
+      PWM upper bound (value for move(index, 1))
     callback
       Callback
   */
@@ -183,10 +178,35 @@ servoController.prototype.configureServo = function (index, low, high, callback)
   }
 };
 
+// Sets the position of the specified servo
+servoController.prototype.move = function (index, val, callback) {
+  /**
+  Args
+    index
+      Index of the servo. NOTE: servos are 1-indexed
+    val
+      Position to which the the servo is to move. 0-1 of its full scale.
+    callback
+      Callback
+  */
+  if (index < 1 || index > 16) {
+    throw 'Servos are 1-indexed. Servos can be between 1-16.';
+  }
+
+  //  If unconfigured, use the controller's default values
+  if (!this.servoConfigurations[index]) {
+    this.configureServo(index, this.low, this.high, null);
+  }
+
+  var low = this.servoConfigurations[index][0];
+  var high = this.servoConfigurations[index][1];
+
+  this.setDutyCycle(index, (val * (high - low)) + low, callback);
+};
+
+// Reads the current approximate position target for the specified servo
 servoController.prototype.readServo = function (servo, callback) {
   /**
-  Read the current approximate position target for the specified servo.
-
   For each channel on the PCA9685, there are two 12 bit registers that
   correspond to the counter values at which the line is set high and low. This
   function reads these registers, calculates the theoretical duty cycle, and
@@ -231,10 +251,9 @@ servoController.prototype.readServo = function (servo, callback) {
   });
 };
 
-servoController.prototype.setDuty = function (index, on, callback) {
+// Sets the duty cycle for the specified servo
+servoController.prototype.setDutyCycle = function (index, on, callback) {
   /**
-  Set the specified channel's duty cycle
-
   Args
     index
       Servo index to set
@@ -263,10 +282,9 @@ servoController.prototype.setDuty = function (index, on, callback) {
   this._chainWrite(registers, data, callback);
 };
 
+// Sets the PWM frequency in Hz for the PCA9685 chip
 servoController.prototype.setFrequency = function (freq, callback) {
   /**
-  Set the PWM frequency for the PCA9685 chip.
-
   Args
     freq
       PWM frequency, in units of Hertz
@@ -288,33 +306,6 @@ servoController.prototype.setFrequency = function (freq, callback) {
     var data = [newMode, prescale, oldMode, 0xa1];
     self._chainWrite(registers, data, callback);
   });
-};
-
-servoController.prototype.setServo = function (index, val, callback) {
-  /**
-  Set the position of the specified servo
-
-  Args
-    index
-      Index of the servo. NOTE: servos are 1-indexed
-    val
-      Position to which the the servo is to move. 0-1 of its full scale.
-    callback
-      Callback
-  */
-  if (index < 1 || index > 16) {
-    throw 'Servos are 1-indexed. Servos can be between 1-16.';
-  }
-
-  //  If unconfigured, use the controller's default values
-  if (!this.servoConfigurations[index]) {
-    this.configureServo(index, this.low, this.high, null);
-  }
-
-  var low = this.servoConfigurations[index][0];
-  var high = this.servoConfigurations[index][1];
-
-  this.setDuty(index, (val * (high - low)) + low, callback);
 };
 
 function use (hardware, low, high, callback) {

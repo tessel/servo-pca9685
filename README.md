@@ -60,17 +60,20 @@ servoController.on('ready', function () {
 
 ##Methods
 
-*  **`servo`.setFrequency(Hertz)**
+*  **`servo`.configureServo(whichServo, minPWM, maxPWM, callback())** Sets the PWM max and min for the specified servo.
 
-*  **`servo`.setServo(servoNumber, %FullRotation)**
+*  **`servo`.move(whichServo, positionOrSpeed, callback())** `positionOrSpeed` is a value between 0 and 1. On a normal servo, this value is the position to move to as a percent of the total available rotational range. On a continuous rotation servo, this value represents the rotation speed: 0 is fast in one direction, 1 is fast in the other direction, and 0.5 is stopped.
 
-*  **`servo`.configureServo(servoNumber, lowestDutyCycle, highestDutyCycle, next)**
+*  **`servo`.readServo(whichServo, callback())** Reads the current approximate position target for the specified servo.
 
-*  **`servo`.readServo(servoNumber, next)**
+*  **`servo`.setDutyCycle(whichServo, on, callback())** Sets the duty cycle for the specified servo. `on` is duty cycle uptime, range from 0-1.
+
+*  **`servo`.setFrequency(Hertz, callback())** Sets the PWM frequency in Hz for the PCA9685 chip.
 
 ##Events
 
 *  *ready*
+
 *  *error*
 
 ##Hardware/Advanced usage
