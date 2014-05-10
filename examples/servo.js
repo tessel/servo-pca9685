@@ -20,7 +20,7 @@ servo.on('ready', function () {
   //  Moving them apart = more range, more likely to stall and burn out
   servo.configure(1, 0.05, 0.12, function () {
     setInterval(function () {
-      console.log('Deg rotation:', pos);
+      console.log('% of full rotation:', pos);
       //  Set servo #1 to position pos.
       servo.move(1, pos, function () {
         //  Read the approximate target positon of servo #1 back from the module.

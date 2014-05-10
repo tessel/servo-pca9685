@@ -39,7 +39,7 @@ servoController.on('ready', function () {
   //  Moving them apart = more range, more likely to stall and burn out
   servoController.configureServo(1, 0.05, 0.12, function () {
     setInterval(function () {
-      console.log('Deg rotation:', pos);
+      console.log('% of full rotation:', pos);
       //  Set servo #1 to position pos.
       servoController.move(1, pos);
 
