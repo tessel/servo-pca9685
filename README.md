@@ -55,21 +55,21 @@ servoController.on('ready', function () {
 
 ##Methods
 
-*  **`servo`.configure(whichServo, minPWM, maxPWM, callback())** Sets the PWM max and min for the specified servo.
+##### * `servo.configure(whichServo, minPWM, maxPWM, callback())` Sets the PWM max and min for the specified servo.
 
-*  **`servo`.move(whichServo, positionOrSpeed, callback())** `positionOrSpeed` is a value between 0 and 1. On a normal servo, this value is the position to move to as a percent of the total available rotational range. On a continuous rotation servo, this value represents the rotation speed: 0 is fast in one direction, 1 is fast in the other direction, and 0.5 is stopped.
+##### * `servo.move(whichServo, positionOrSpeed, callback())` `positionOrSpeed` is a value between 0 and 1. On a normal servo, this value is the position to move to as a percent of the total available rotational range. On a continuous rotation servo, this value represents the rotation speed: 0 is fast in one direction, 1 is fast in the other direction, and 0.5 is stopped.
 
-*  **`servo`.read(whichServo, callback())** Reads the current approximate position target for the specified servo.
+##### * `servo.read(whichServo, callback())` Reads the current approximate position target for the specified servo.
 
-*  **`servo`.setDutyCycle(whichServo, on, callback())** Sets the duty cycle for the specified servo. `on` is duty cycle uptime, range from 0-1.
+##### * `servo.setDutyCycle(whichServo, on, callback())` Sets the duty cycle for the specified servo. `on` is duty cycle uptime, range from 0-1.
 
-*  **`servo`.setModuleFrequency(Hertz, callback())** Sets the PWM frequency in Hz for the PCA9685 chip.
+##### * `servo.setModuleFrequency(Hertz, callback())` Sets the PWM frequency in Hz for the PCA9685 chip.
 
 ##Events
 
-* *error* Emitted upon error.
+##### * `servo.on('error', callback(err))` Emitted upon error.
 
-* *ready* Emitted upon first successful communication between the Tessel and the module.
+##### * `servo.on('ready', callback())` Emitted upon first successful communication between the Tessel and the module.
 
 ##Hardware/Advanced usage
 
