@@ -79,5 +79,4 @@ servoController.on('ready', function () {
 *  The bare square pads by the barrel jack allow the addition of a capacitor to the input power rail if desired. The pad closest to the board edge is connected to GND, the other to the barrel jack's positive pin. This addition is not required for proper module functionality.
 
 ## License
-MIT
-APACHE
+MIT or Apache 2.0, at your option
