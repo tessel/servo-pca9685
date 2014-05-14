@@ -1,0 +1,140 @@
+0 info it worked if it ends with ok
+1 verbose cli [ 'node', '/usr/local/bin/npm', 'publish' ]
+2 info using npm@1.3.25
+3 info using node@v0.10.18
+4 verbose publish [ '.' ]
+5 verbose cache add [ '.', null ]
+6 verbose cache add name=undefined spec="." args=[".",null]
+7 verbose parsed url { protocol: null,
+7 verbose parsed url   slashes: null,
+7 verbose parsed url   auth: null,
+7 verbose parsed url   host: null,
+7 verbose parsed url   port: null,
+7 verbose parsed url   hostname: null,
+7 verbose parsed url   hash: null,
+7 verbose parsed url   search: null,
+7 verbose parsed url   query: null,
+7 verbose parsed url   pathname: '.',
+7 verbose parsed url   path: '.',
+7 verbose parsed url   href: '.' }
+8 silly lockFile 3a52ce78- .
+9 verbose lock . /Users/tim/.npm/3a52ce78-.lock
+10 verbose tar pack [ '/var/folders/1g/86gwn5hj00lgx_mp0t0v82600000gn/T/npm-96993-4o7-pGzL/1400101851632-0.8379527747165412/tmp.tgz',
+10 verbose tar pack   '.' ]
+11 verbose tarball /var/folders/1g/86gwn5hj00lgx_mp0t0v82600000gn/T/npm-96993-4o7-pGzL/1400101851632-0.8379527747165412/tmp.tgz
+12 verbose folder .
+13 info prepublish servo-pca9685@0.0.45
+14 silly lockFile 1f1177db-tar tar://.
+15 verbose lock tar://. /Users/tim/.npm/1f1177db-tar.lock
+16 silly lockFile 47af3561-51632-0-8379527747165412-tmp-tgz tar:///var/folders/1g/86gwn5hj00lgx_mp0t0v82600000gn/T/npm-96993-4o7-pGzL/1400101851632-0.8379527747165412/tmp.tgz
+17 verbose lock tar:///var/folders/1g/86gwn5hj00lgx_mp0t0v82600000gn/T/npm-96993-4o7-pGzL/1400101851632-0.8379527747165412/tmp.tgz /Users/tim/.npm/47af3561-51632-0-8379527747165412-tmp-tgz.lock
+18 silly lockFile 1f1177db-tar tar://.
+19 silly lockFile 1f1177db-tar tar://.
+20 silly lockFile 47af3561-51632-0-8379527747165412-tmp-tgz tar:///var/folders/1g/86gwn5hj00lgx_mp0t0v82600000gn/T/npm-96993-4o7-pGzL/1400101851632-0.8379527747165412/tmp.tgz
+21 silly lockFile 47af3561-51632-0-8379527747165412-tmp-tgz tar:///var/folders/1g/86gwn5hj00lgx_mp0t0v82600000gn/T/npm-96993-4o7-pGzL/1400101851632-0.8379527747165412/tmp.tgz
+22 verbose tar unpack /var/folders/1g/86gwn5hj00lgx_mp0t0v82600000gn/T/npm-96993-4o7-pGzL/1400101851632-0.8379527747165412/tmp.tgz
+23 silly lockFile 7e813b54-51632-0-8379527747165412-package tar:///var/folders/1g/86gwn5hj00lgx_mp0t0v82600000gn/T/npm-96993-4o7-pGzL/1400101851632-0.8379527747165412/package
+24 verbose lock tar:///var/folders/1g/86gwn5hj00lgx_mp0t0v82600000gn/T/npm-96993-4o7-pGzL/1400101851632-0.8379527747165412/package /Users/tim/.npm/7e813b54-51632-0-8379527747165412-package.lock
+25 silly lockFile 47af3561-51632-0-8379527747165412-tmp-tgz tar:///var/folders/1g/86gwn5hj00lgx_mp0t0v82600000gn/T/npm-96993-4o7-pGzL/1400101851632-0.8379527747165412/tmp.tgz
+26 verbose lock tar:///var/folders/1g/86gwn5hj00lgx_mp0t0v82600000gn/T/npm-96993-4o7-pGzL/1400101851632-0.8379527747165412/tmp.tgz /Users/tim/.npm/47af3561-51632-0-8379527747165412-tmp-tgz.lock
+27 silly gunzTarPerm modes [ '755', '644' ]
+28 silly gunzTarPerm extractEntry package.json
+29 silly gunzTarPerm extractEntry README.md
+30 silly gunzTarPerm extractEntry index.js
+31 silly gunzTarPerm extractEntry COPYRIGHT
+32 silly gunzTarPerm extractEntry LICENSE-APACHE
+33 silly gunzTarPerm extractEntry LICENSE-MIT
+34 silly gunzTarPerm extractEntry examples/servo.js
+35 silly lockFile 7e813b54-51632-0-8379527747165412-package tar:///var/folders/1g/86gwn5hj00lgx_mp0t0v82600000gn/T/npm-96993-4o7-pGzL/1400101851632-0.8379527747165412/package
+36 silly lockFile 7e813b54-51632-0-8379527747165412-package tar:///var/folders/1g/86gwn5hj00lgx_mp0t0v82600000gn/T/npm-96993-4o7-pGzL/1400101851632-0.8379527747165412/package
+37 silly lockFile 47af3561-51632-0-8379527747165412-tmp-tgz tar:///var/folders/1g/86gwn5hj00lgx_mp0t0v82600000gn/T/npm-96993-4o7-pGzL/1400101851632-0.8379527747165412/tmp.tgz
+38 silly lockFile 47af3561-51632-0-8379527747165412-tmp-tgz tar:///var/folders/1g/86gwn5hj00lgx_mp0t0v82600000gn/T/npm-96993-4o7-pGzL/1400101851632-0.8379527747165412/tmp.tgz
+39 verbose tar pack [ '/Users/tim/.npm/servo-pca9685/0.0.45/package.tgz',
+39 verbose tar pack   '/var/folders/1g/86gwn5hj00lgx_mp0t0v82600000gn/T/npm-96993-4o7-pGzL/1400101851632-0.8379527747165412/package' ]
+40 verbose tarball /Users/tim/.npm/servo-pca9685/0.0.45/package.tgz
+41 verbose folder /var/folders/1g/86gwn5hj00lgx_mp0t0v82600000gn/T/npm-96993-4o7-pGzL/1400101851632-0.8379527747165412/package
+42 silly lockFile 7e813b54-51632-0-8379527747165412-package tar:///var/folders/1g/86gwn5hj00lgx_mp0t0v82600000gn/T/npm-96993-4o7-pGzL/1400101851632-0.8379527747165412/package
+43 verbose lock tar:///var/folders/1g/86gwn5hj00lgx_mp0t0v82600000gn/T/npm-96993-4o7-pGzL/1400101851632-0.8379527747165412/package /Users/tim/.npm/7e813b54-51632-0-8379527747165412-package.lock
+44 silly lockFile b0a0118b-servo-pca9685-0-0-45-package-tgz tar:///Users/tim/.npm/servo-pca9685/0.0.45/package.tgz
+45 verbose lock tar:///Users/tim/.npm/servo-pca9685/0.0.45/package.tgz /Users/tim/.npm/b0a0118b-servo-pca9685-0-0-45-package-tgz.lock
+46 silly lockFile 7e813b54-51632-0-8379527747165412-package tar:///var/folders/1g/86gwn5hj00lgx_mp0t0v82600000gn/T/npm-96993-4o7-pGzL/1400101851632-0.8379527747165412/package
+47 silly lockFile 7e813b54-51632-0-8379527747165412-package tar:///var/folders/1g/86gwn5hj00lgx_mp0t0v82600000gn/T/npm-96993-4o7-pGzL/1400101851632-0.8379527747165412/package
+48 silly lockFile b0a0118b-servo-pca9685-0-0-45-package-tgz tar:///Users/tim/.npm/servo-pca9685/0.0.45/package.tgz
+49 silly lockFile b0a0118b-servo-pca9685-0-0-45-package-tgz tar:///Users/tim/.npm/servo-pca9685/0.0.45/package.tgz
+50 silly lockFile 2cb8994e-npm-servo-pca9685-0-0-45-package /Users/tim/.npm/servo-pca9685/0.0.45/package
+51 verbose lock /Users/tim/.npm/servo-pca9685/0.0.45/package /Users/tim/.npm/2cb8994e-npm-servo-pca9685-0-0-45-package.lock
+52 silly lockFile 2cb8994e-npm-servo-pca9685-0-0-45-package /Users/tim/.npm/servo-pca9685/0.0.45/package
+53 silly lockFile 2cb8994e-npm-servo-pca9685-0-0-45-package /Users/tim/.npm/servo-pca9685/0.0.45/package
+54 verbose tar unpack /Users/tim/.npm/servo-pca9685/0.0.45/package.tgz
+55 silly lockFile ff7710e4-npm-servo-pca9685-0-0-45-package tar:///Users/tim/.npm/servo-pca9685/0.0.45/package
+56 verbose lock tar:///Users/tim/.npm/servo-pca9685/0.0.45/package /Users/tim/.npm/ff7710e4-npm-servo-pca9685-0-0-45-package.lock
+57 silly lockFile b0a0118b-servo-pca9685-0-0-45-package-tgz tar:///Users/tim/.npm/servo-pca9685/0.0.45/package.tgz
+58 verbose lock tar:///Users/tim/.npm/servo-pca9685/0.0.45/package.tgz /Users/tim/.npm/b0a0118b-servo-pca9685-0-0-45-package-tgz.lock
+59 silly gunzTarPerm modes [ '755', '644' ]
+60 silly gunzTarPerm extractEntry package.json
+61 silly gunzTarPerm extractEntry README.md
+62 silly gunzTarPerm extractEntry index.js
+63 silly gunzTarPerm extractEntry COPYRIGHT
+64 silly gunzTarPerm extractEntry LICENSE-APACHE
+65 silly gunzTarPerm extractEntry LICENSE-MIT
+66 silly gunzTarPerm extractEntry examples/servo.js
+67 silly lockFile ff7710e4-npm-servo-pca9685-0-0-45-package tar:///Users/tim/.npm/servo-pca9685/0.0.45/package
+68 silly lockFile ff7710e4-npm-servo-pca9685-0-0-45-package tar:///Users/tim/.npm/servo-pca9685/0.0.45/package
+69 silly lockFile b0a0118b-servo-pca9685-0-0-45-package-tgz tar:///Users/tim/.npm/servo-pca9685/0.0.45/package.tgz
+70 silly lockFile b0a0118b-servo-pca9685-0-0-45-package-tgz tar:///Users/tim/.npm/servo-pca9685/0.0.45/package.tgz
+71 verbose chmod /Users/tim/.npm/servo-pca9685/0.0.45/package.tgz 644
+72 verbose chown /Users/tim/.npm/servo-pca9685/0.0.45/package.tgz [ 501, 20 ]
+73 silly lockFile 3a52ce78- .
+74 silly lockFile 3a52ce78- .
+75 silly publish { name: 'servo-pca9685',
+75 silly publish   version: '0.0.45',
+75 silly publish   description: 'Library to run the PCA9685 PWM driver.',
+75 silly publish   main: 'index.js',
+75 silly publish   scripts: { test: 'echo "Error: no test specified" && exit 1' },
+75 silly publish   repository:
+75 silly publish    { type: 'git',
+75 silly publish      url: 'git://github.com/technicalmachine/servo-pca9685.git' },
+75 silly publish   author: { name: 'Jia Huang', email: 'jialiya.huang0@gmail.com' },
+75 silly publish   license: 'MIT',
+75 silly publish   readmeFilename: 'README.md',
+75 silly publish   directories: { example: 'examples' },
+75 silly publish   hardware: { './examples': false },
+75 silly publish   keywords: [ 'tessel', 'servo', 'pca9685' ],
+75 silly publish   gitHead: '817db128bd7934a99c3d412b725712008def9931',
+75 silly publish   readme: '#Servo\nDriver for the servo-pca9685 Tessel servo module ([PCA9685](http://www.nxp.com/documents/data_sheet/PCA9685.pdf)), capable of driving up to 16 servos at once. Can also be used to drive other devices which accept a 3.3 V PWM signal (most motor controllers, LEDs, gate drivers, etc.).\n\n## TODO\n\nThis can be used with LEDs also and this package is very narrowly named.\n\n##Installation\n```sh\nnpm install servo-pca9685\n```\n\n##Example\n```js\n/*********************************************\nThis servo module demo turns the servo around\n~18 degrees every 500ms, then resets it after\n10 turns, reading out position to the console\nat each movement.\n*********************************************/\n\nvar tessel = require(\'tessel\');\nvar servo = require(\'servo-pca9685\');\n\nvar hardware = tessel.port(\'A\');\n\n// Initialize the servo.\nconsole.log(\'Initalizing...\');\n\nvar servoController = servo.use(hardware);\n\nservoController.on(\'ready\', function () {\n  var pos = 0;  //  Target position of the servo between 0 (min) and 1 (max).\n\n  //  Set the minimum and maximum duty cycle for servo 1.\n  //  If the servo doesn\'t move to its full extent or stalls out\n  //  and gets hot, try tuning these values (0.05 and 0.12).\n  //  Moving them towards each other = less movement range\n  //  Moving them apart = more range, more likely to stall and burn out\n  servoController.configureServo(1, 0.05, 0.12, function () {\n    setInterval(function () {\n      console.log(\'% of full rotation:\', pos);\n      //  Set servo #1 to position pos.\n      servoController.move(1, pos);\n\n      // Increment by 10% (~18 deg for a normal servo)\n      pos += 0.1;\n      if (pos > 1) {\n        pos = 0;\n      }\n    }, 500);\n  });\n});\n```\n\n##Methods\n\n##### * `servo.configure(whichServo, minPWM, maxPWM, callback())` Sets the PWM max and min for the specified servo.\n\n##### * `servo.move(whichServo, positionOrSpeed, callback())` `positionOrSpeed` is a value between 0 and 1. On a normal servo, this value is the position to move to as a percent of the total available rotational range. On a continuous rotation servo, this value represents the rotation speed: 0 is fast in one direction, 1 is fast in the other direction, and 0.5 is stopped.\n\n##### * `servo.read(whichServo, callback())` Reads the current approximate position target for the specified servo.\n\n##### * `servo.setDutyCycle(whichServo, on, callback())` Sets the duty cycle for the specified servo. `on` is duty cycle uptime, range from 0-1.\n\n##### * `servo.setModuleFrequency(Hertz, callback())` Sets the PWM frequency in Hz for the PCA9685 chip.\n\n##Events\n\n##### * `servo.on(\'error\', callback(err))` Emitted upon error.\n\n##### * `servo.on(\'ready\', callback())` Emitted upon first successful communication between the Tessel and the module.\n\n##Hardware/Advanced usage\n\n*  The servos used in conjunction with this module should be powered through the 5.5 mm barrel jack.\n*  The physical *module* is marked with "S", "+", and "-". These correspond to signal, power, and GND. On most *servos*, the GND wire will be black/brown and the signal wire will be yellow/white. Red typically denotes 5 V power.\n*  This module can be used to drive most speed controllers, which in turn can control a wide variety of actuators. It can also be used to drive small LEDs with current limiting resistors in series.\n*  The bare square pads by the barrel jack allow the addition of a capacitor to the input power rail if desired. The pad closest to the board edge is connected to GND, the other to the barrel jack\'s positive pin. This addition is not required for proper module functionality.\n\n## License\nMIT or Apache 2.0, at your option\n',
+75 silly publish   bugs: { url: 'https://github.com/technicalmachine/servo-pca9685/issues' },
+75 silly publish   homepage: 'https://github.com/technicalmachine/servo-pca9685',
+75 silly publish   _id: 'servo-pca9685@0.0.45',
+75 silly publish   dist: { shasum: 'dd8499be7fc9366dbfba93fc750bd1d3552ea93f' },
+75 silly publish   _from: '.' }
+76 verbose url raw servo-pca9685
+77 verbose url resolving [ 'https://registry.npmjs.org/', './servo-pca9685' ]
+78 verbose url resolved https://registry.npmjs.org/servo-pca9685
+79 info trying registry request attempt 1 at 14:10:51
+80 http PUT https://registry.npmjs.org/servo-pca9685
+81 http 403 https://registry.npmjs.org/servo-pca9685
+82 info trying registry request attempt 1 at 14:10:53
+83 http PUT https://registry.npmjs.org/servo-pca9685
+84 http 403 https://registry.npmjs.org/servo-pca9685
+85 error publish Failed PUT 403
+86 error Error: forbidden cannot modify pre-existing version: 0.0.45
+86 error old={"name":"servo-pca9685","version":"0.0.45","description":"Library to run the PCA9685 PWM driver.","main":"index.js","scripts":{"test":"echo \"Error: no test specified\" && exit 1"},"repository":{"type":"git","url":"git://github.com/technicalmachine/servo-pca9685.git"},"author":{"name":"Jia Huang","email":"jialiya.huang0@gmail.com"},"license":"MIT","directories":{"example":"examples"},"hardware":{"./examples":false},"keywords":["tessel","servo","pca9685"],"gitHead":"817db128bd7934a99c3d412b725712008def9931","bugs":{"url":"https://github.com/technicalmachine/servo-pca9685/issues"},"homepage":"https://github.com/technicalmachine/servo-pca9685","_id":"servo-pca9685@0.0.45","dist":{"shasum":"66c4cd74fee3e27b083d52abf4c4c7e2571b0caf","tarball":"http://registry.npmjs.org/servo-pca9685/-/servo-pca9685-0.0.45.tgz"},"_from":".","_npmVersion":"1.4.3","_npmUser":{"name":"technicalmachine","email":"team@technical.io"},"maintainers":[{"name":"jiahuang","email":"jialiya.huang0@gmail.com"},{"name":"tcr","email":"id@timryan.org"},{"name":"technicalmachine","email":"team@technical.io"}]}
+86 error new={"name":"servo-pca9685","version":"0.0.45","description":"Library to run the PCA9685 PWM driver.","main":"index.js","scripts":{"test":"echo \"Error: no test specified\" && exit 1"},"repository":{"type":"git","url":"git://github.com/technicalmachine/servo-pca9685.git"},"author":{"name":"Jia Huang","email":"jialiya.huang0@gmail.com"},"license":"MIT","readmeFilename":"README.md","directories":{"example":"examples"},"hardware":{"./examples":false},"keywords":["tessel","servo","pca9685"],"gitHead":"817db128bd7934a99c3d412b725712008def9931","readme":"#Servo\u000aDriver for the servo-pca9685 Tessel servo module ([PCA9685](http://www.nxp.com/documents/data_sheet/PCA9685.pdf)), capable of driving up to 16 servos at once. Can also be used to drive other devices which accept a 3.3 V PWM signal (most motor controllers, LEDs, gate drivers, etc.).\u000a\u000a## TODO\u000a\u000aThis can be used with LEDs also and this package is very narrowly named.\u000a\u000a##Installation\u000a```sh\u000anpm install servo-pca9685\u000a```\u000a\u000a##Example\u000a```js\u000a/*********************************************\u000aThis servo module demo turns the servo around\u000a~18 degrees every 500ms, then resets it after\u000a10 turns, reading out position to the console\u000aat each movement.\u000a*********************************************/\u000a\u000avar tessel = require('tessel');\u000avar servo = require('servo-pca9685');\u000a\u000avar hardware = tessel.port('A');\u000a\u000a// Initialize the servo.\u000aconsole.log('Initalizing...');\u000a\u000avar servoController = servo.use(hardware);\u000a\u000aservoController.on('ready', function () {\u000a  var pos = 0;  //  Target position of the servo between 0 (min) and 1 (max).\u000a\u000a  //  Set the minimum and maximum duty cycle for servo 1.\u000a  //  If the servo doesn't move to its full extent or stalls out\u000a  //  and gets hot, try tuning these values (0.05 and 0.12).\u000a  //  Moving them towards each other = less movement range\u000a  //  Moving them apart = more range, more likely to stall and burn out\u000a  servoController.configureServo(1, 0.05, 0.12, function () {\u000a    setInterval(function () {\u000a      console.log('% of full rotation:', pos);\u000a      //  Set servo #1 to position pos.\u000a      servoController.move(1, pos);\u000a\u000a      // Increment by 10% (~18 deg for a normal servo)\u000a      pos += 0.1;\u000a      if (pos > 1) {\u000a        pos = 0;\u000a      }\u000a    }, 500);\u000a  });\u000a});\u000a```\u000a\u000a##Methods\u000a\u000a##### * `servo.configure(whichServo, minPWM, maxPWM, callback())` Sets the PWM max and min for the specified servo.\u000a\u000a##### * `servo.move(whichServo, positionOrSpeed, callback())` `positionOrSpeed` is a value between 0 and 1. On a normal servo, this value is the position to move to as a percent of the total available rotational range. On a continuous rotation servo, this value represents the rotation speed: 0 is fast in one direction, 1 is fast in the other direction, and 0.5 is stopped.\u000a\u000a##### * `servo.read(whichServo, callback())` Reads the current approximate position target for the specified servo.\u000a\u000a##### * `servo.setDutyCycle(whichServo, on, callback())` Sets the duty cycle for the specified servo. `on` is duty cycle uptime, range from 0-1.\u000a\u000a##### * `servo.setModuleFrequency(Hertz, callback())` Sets the PWM frequency in Hz for the PCA9685 chip.\u000a\u000a##Events\u000a\u000a##### * `servo.on('error', callback(err))` Emitted upon error.\u000a\u000a##### * `servo.on('ready', callback())` Emitted upon first successful communication between the Tessel and the module.\u000a\u000a##Hardware/Advanced usage\u000a\u000a*  The servos used in conjunction with this module should be powered through the 5.5 mm barrel jack.\u000a*  The physical *module* is marked with \"S\", \"+\", and \"-\". These correspond to signal, power, and GND. On most *servos*, the GND wire will be black/brown and the signal wire will be yellow/white. Red typically denotes 5 V power.\u000a*  This module can be used to drive most speed controllers, which in turn can control a wide variety of actuators. It can also be used to drive small LEDs with current limiting resistors in series.\u000a*  The bare square pads by the barrel jack allow the addition of a capacitor to the input power rail if desired. The pad closest to the board edge is connected to GND, the other to the barrel jack's positive pin. This addition is not required for proper module functionality.\u000a\u000a## License\u000aMIT or Apache 2.0, at your option\u000a","bugs":{"url":"https://github.com/technicalmachine/servo-pca9685/issues"},"homepage":"https://github.com/technicalmachine/servo-pca9685","_id":"servo-pca9685@0.0.45","dist":{"shasum":"dd8499be7fc9366dbfba93fc750bd1d3552ea93f","tarball":"http://registry.npmjs.org/servo-pca9685/-/servo-pca9685-0.0.45.tgz"},"_from":".","_npmVersion":"1.3.25","_npmUser":{"name":"tcr","email":"id@timryan.org"},"maintainers":[{"name":"tcr","email":"id@timryan.org"}]}: servo-pca9685
+86 error     at RegClient.<anonymous> (/usr/local/lib/node_modules/npm/node_modules/npm-registry-client/lib/request.js:275:14)
+86 error     at Request.self.callback (/usr/local/lib/node_modules/npm/node_modules/request/request.js:123:22)
+86 error     at Request.EventEmitter.emit (events.js:98:17)
+86 error     at Request.<anonymous> (/usr/local/lib/node_modules/npm/node_modules/request/request.js:893:14)
+86 error     at Request.EventEmitter.emit (events.js:117:20)
+86 error     at IncomingMessage.<anonymous> (/usr/local/lib/node_modules/npm/node_modules/request/request.js:844:12)
+86 error     at IncomingMessage.EventEmitter.emit (events.js:117:20)
+86 error     at _stream_readable.js:920:16
+86 error     at process._tickCallback (node.js:415:13)
+87 error If you need help, you may report this *entire* log,
+87 error including the npm and node versions, at:
+87 error     <http://github.com/isaacs/npm/issues>
+88 error System Darwin 13.2.0
+89 error command "node" "/usr/local/bin/npm" "publish"
+90 error cwd /Users/tim/Code/technical/modules/servo-pca9685
+91 error node -v v0.10.18
+92 error npm -v 1.3.25
+93 verbose exit [ 1, true ]
