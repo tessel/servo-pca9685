@@ -4,13 +4,10 @@
   "description": "Library to run the PCA9685 PWM driver.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "./testsuite.js"
   },
-  "repository": {
-    "type": "git",
-    "url": "git://github.com/technicalmachine/servo-pca9685.git"
-  },
-  "author": "Jia Huang <jialiya.huang0@gmail.com>",
+  "repository": "tessel/servo-pca9685",
+  "author": "Jia Huang <jia@technical.io>",
   "license": "MIT",
   "readmeFilename": "README.md",
   "directories": {
@@ -18,6 +15,13 @@
   },
   "hardware": {
     "./examples": false
+  },
+  "dependencies": {
+  },
+  "devDependencies": {
+    "tape": "~2.3.2",
+    "tap": "git+https://github.com/tcr/node-tap.git#3cb76e",
+    "shelljs": "~0.3.0"
   },
   "keywords": [
     "tessel",
