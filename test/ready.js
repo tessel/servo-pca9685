@@ -13,3 +13,8 @@ gps.on('ready', function () {
   console.log('ok - servo is ready and connected');
   process.exit(0);
 });
+
+gps.on('error', function (err) {
+  console.log('not ok - servo emitted error:', err);
+  process.exit(1);
+});
