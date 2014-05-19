@@ -333,15 +333,16 @@ function use (hardware, low, high, callback) {
       setImmediate(function() {
         servos.emit('ready');
       });
-    }
-    else {
+      if (callback) {
+        callback(null, servos);
+      }
+    } else {
       setImmediate(function() {
-        servos.emit('error');
+        servos.emit('error', err);
       });
-    }
-
-    if (callback) {
-      callback();
+      if (callback) {
+        callback(err);
+      }
     }
   });
   return servos;
