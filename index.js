@@ -332,17 +332,17 @@ function use (hardware, low, high, callback) {
       servos._connected = true;
       setImmediate(function() {
         servos.emit('ready');
-        if (callback) {
-          callback(null, servos);
-        }
       });
+      if (callback) {
+        callback(null, servos);
+      }
     } else {
       setImmediate(function() {
         servos.emit('error', err);
-        if (callback) {
-          callback(err);
-        }
       });
+      if (callback) {
+        callback(err);
+      }
     }
   });
   return servos;
