@@ -4,7 +4,7 @@
   "description": "Library to run the PCA9685 PWM driver.",
   "main": "index.js",
   "scripts": {
-    "test": "./testsuite.js"
+    "test": "tinytap -e 'tessel run {} ${SERVO_PORT}' test/*.js"
   },
   "repository": "tessel/servo-pca9685",
   "author": "Jia Huang <jia@technical.io>",
@@ -16,12 +16,9 @@
   "hardware": {
     "./examples": false
   },
-  "dependencies": {
-  },
+  "dependencies": {},
   "devDependencies": {
-    "tape": "~2.3.2",
-    "tap": "git+https://github.com/tcr/node-tap.git#3cb76e",
-    "shelljs": "~0.3.0"
+    "tinytap": "0.0.2"
   },
   "keywords": [
     "tessel",
