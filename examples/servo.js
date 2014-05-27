@@ -9,7 +9,7 @@ to the console at each movement.
 *********************************************/
 
 var tessel = require('tessel');
-var servo = require('../').use(tessel.port('A'));
+var servo = require('../').use(tessel.port['A']);
 
 var servo1 = 1; // We have a servo plugged in at position 1
 
