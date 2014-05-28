@@ -45,7 +45,7 @@ function servoController (hardware, low, high, addr2, addr3) {
   this.high = high || 0.12;
 
   //  Enable the outpts
-  hardware.digital[3].write(0);
+  hardware.digital[2].write(0);
 
   //  Configure I2C address
   this.address = I2C_ADDRESS;
@@ -53,8 +53,8 @@ function servoController (hardware, low, high, addr2, addr3) {
   addr2 = addr2 || 0;
   addr3 = addr3 || 0;
 
-  hardware.digital[2].write(addr2);
-  hardware.digital[1].write(addr3);
+  hardware.digital[1].write(addr2);
+  hardware.digital[0].write(addr3);
 
   this.address |= addr2 << 2;
   this.address |= addr3 << 3;
