@@ -51,7 +51,7 @@ servo.on('ready', function () {
     // its full range of motion.
     process.stdin.on('data', function (duty) {
       duty = parseFloat(String(duty));
-      console.log('Got command position:', [duty]);
+      console.log('Setting command position:', duty);
       servo.move(servoNumber, duty);
     });
   });
