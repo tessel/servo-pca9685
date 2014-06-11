@@ -50,7 +50,7 @@ servo.on('ready', function () {
     // allowing you to easily command the actuator through
     // its full range of motion.
     process.stdin.on('data', function (duty) {
-      duty = parseFloat(String(duty).replace(/[\r\n]*$/, ''));
+      duty = parseFloat(String(duty));
       console.log('Got command position:', [duty]);
       servo.move(servoNumber, duty);
     });
