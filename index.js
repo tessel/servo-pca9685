@@ -114,8 +114,7 @@ servoController.prototype._chainWrite = function(registers, data, callback) {
     if (callback) {
       callback();
     }
-  }
-  else {
+  } else {
     self.i2c.send(new Buffer([registers[0], data[0]]), function() {
       self._chainWrite(registers.slice(1), data.slice(1), callback);
     });
@@ -172,9 +171,14 @@ servoController.prototype.configure = function (index, low, high, callback) {
     callback
       Callback
   */
+  if(low >= high) {
+    callback(new Error('Minimum PWM must be smaller than maximum PWM.'));
+    return;
+  }
+  
   this.servoConfigurations[index] = [low, high];
   if (callback) {
-    callback();
+    callback(null);
   }
 };
 
