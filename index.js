@@ -190,7 +190,11 @@ servoController.prototype.move = function (index, val, callback) {
       Callback
   */
   if (index < 1 || index > 16) {
-    throw 'Servos are 1-indexed. Servos can be between 1-16.';
+    var err = new Error('Servos are 1-indexed. Servos can be between 1-16.');
+    if(callback) {
+      callback(err);
+    }
+    return err;
   }
 
   //  If unconfigured, use the controller's default values
@@ -264,7 +268,11 @@ servoController.prototype.setDutyCycle = function (index, on, callback) {
   */
 
   if (index < 1 || index > 16) {
-    throw 'Servos are 1-indexed. Servos can be between 1-16.';
+    var err = new Error('Servos are 1-indexed. Servos can be between 1-16.');
+    if(callback) {
+      callback(err);
+    }
+    return err;
   }
 
   var convertOn = 0;
