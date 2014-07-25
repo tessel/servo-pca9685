@@ -72,8 +72,10 @@ async.series([
         servo.configure(thisServo, minPWM, maxPWM, function (err) {
           // Make sure errors get caught properly
           if (minPWM < maxPWM) {
+            // Should error
             t.equal(err, undefined, 'There was an error configuring servo ' + thisServo + ' to [min, max] [' + minPWM + ', ' + maxPWM + ']: ' + err);
           } else {
+            // Shouldn't error
             t.ok(err !== undefined, 'Silent failure on minPWM >= maxPWM for servo ' + thisServo + ' and values [min, max] [' + minPWM + ', ' + maxPWM + ']');
           }
           // Configure back to a good range for our servos
@@ -88,20 +90,30 @@ async.series([
       });
     });
   }),
-  // 
-  // test('move', function (t) {
-  //   var pos = 1;
-  //   var count = 0;
-  //   for(i = 1; i < numServos + 1; i++) {
-  //     servo.move(i, pos, function (err) {
-  //       t.equal(err, undefined, 'There was an error moving servo ' + i + 'to position ' + pos + ': ' + err);
-  //       count ++;
-  //       if(count == numServos - 1) {
-  //         t.end();
-  //       }
-  //     });
-  //   }
-  // }),
+  
+  test('move', function (t) {
+    var positions = genRandArray(3, 1.5);
+    var count = 0;
+    var total = servos.length * positions.length;
+    servos.forEach(function (thisServo) {
+      positions.forEach(function (position) {
+        servo.move(thisServo, position, function (err) {
+          // Make sure errors get caught properly
+          if (position >=0 && position <=1) {
+            // Shouldn't error
+            t.equal(err, undefined, 'There was an error moving servo ' + thisServo + ' to position ' + pos + ': ' + err);
+          } else {
+            // Should error
+            t.ok(err !== undefined, 'Silent failure of out-of-range position for servo ' + thisServo + ' to position ' + position);
+          }
+          count ++;
+          if(count == total) {
+            t.end();
+          }
+        });
+      });
+    });
+  }),
   // 
   // test('read', function (t) {
   //   var total = servos.length;

@@ -200,6 +200,14 @@ servoController.prototype.move = function (index, val, callback) {
     }
     return err;
   }
+  
+  if (val < 0 || val > 1) {
+    var err = new Error('Invalid position. Value must be between 0 and 1');
+    if(callback) {
+      callback(err);
+    }
+    return err;
+  }
 
   //  If unconfigured, use the controller's default values
   if (!this.servoConfigurations[index]) {
@@ -273,6 +281,14 @@ servoController.prototype.setDutyCycle = function (index, on, callback) {
 
   if (index < 1 || index > 16) {
     var err = new Error('Servos are 1-indexed. Servos can be between 1-16.');
+    if(callback) {
+      callback(err);
+    }
+    return err;
+  }
+  
+  if (on < 0 || on > 1) {
+    var err = new Error('Invalid duty cycle. Value must be between 0 and 1');
     if(callback) {
       callback(err);
     }
