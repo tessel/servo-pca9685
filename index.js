@@ -242,7 +242,7 @@ servoController.prototype.read = function (servo, callback) {
   */
   if (!this.servoConfigurations[servo]) {
     if (callback) {
-      callback(new Error('servo not configured'), null);
+      callback(new Error('Unconfigured servo cannot have a defined position. Configure your servo before reading.'), null);
     }
   }
 
