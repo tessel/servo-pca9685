@@ -73,10 +73,10 @@ async.series([
         servo.configure(thisServo, minPWM, maxPWM, function (err) {
           // Make sure errors get caught properly
           if (minPWM < maxPWM) {
-            // Should error
+            // Shouldn't error
             t.equal(err, undefined, 'There was an error configuring servo ' + thisServo + ' to [min, max] [' + minPWM + ', ' + maxPWM + ']: ' + err);
           } else {
-            // Shouldn't error
+            // Should error
             t.ok(err !== undefined, 'Silent failure on minPWM >= maxPWM for servo ' + thisServo + ' and values [min, max] [' + minPWM + ', ' + maxPWM + ']');
           }
           // Configure back to a good range for our servos
@@ -100,7 +100,7 @@ async.series([
       positions.forEach(function (position) {
         servo.move(thisServo, position, function (err) {
           // Make sure errors get caught properly
-          if (position >=0 && position <=1) {
+          if (position >= 0 && position <= 1) {
             // Shouldn't error
             t.equal(err, undefined, 'There was an error moving servo ' + thisServo + ' to position ' + pos + ': ' + err);
           } else {
@@ -123,7 +123,7 @@ async.series([
       servo.read(thisServo, function (err, data) {
         t.equal(err, undefined, 'There was an error reading servo ' + thisServo + ': ' + err);
         t.equal(typeof data, 'number', 'Data read from servo is NaN');
-        t.ok(data > 0 && data < 1, 'Invalid data returned');
+        t.ok(data >= 0 && data <= 1, 'Invalid data returned');
         count++;
         if(count === total) {
           t.end();
@@ -158,8 +158,46 @@ async.series([
         t.equal(err, undefined, 'There was an error setting the module frequency to ' + freq + ': ' + err);
         count++;
         if(count === total) {
-          t.end();
+          // Make sure we leave the module frequency at 50 to work with our servos.
+          servo.setModuleFrequency(50, function (err) {
+            t.end();
+          });
         }
+      });
+    });
+  }),
+  
+  test('move, setDutyCycle, and read', function (t) {
+    var testVals = genRandArray(5);
+    var tolerance = 0.5; // This is a huge tolerance.
+    var count = 0;
+    var total = servos.length * testVals.length * 2;
+    // Move and read
+    servos.forEach(function (thisServo) {
+      testVals.forEach(function (val) {
+        servo.move(thisServo, val, function (err) {
+          t.equal(err, undefined, 'There was an error moving servo ' + thisServo + ' to position ' + pos + ': ' + err);
+          servo.read(thisServo, function (err, data) {
+            t.equal(err, undefined, 'There was an error reading servo ' + thisServo + ': ' + err);
+            t.equal(typeof data, 'number', 'Data read from servo is NaN');
+            t.ok(data >= 0 && data <= 1, 'Invalid data returned');
+            t.ok(data > (val - tolerance) && data < (val + tolerance), 'Servo ' + thisServo + ' moved to ' + data + ' when it should have moved to ' + val);
+          });
+        });
+      });
+    });
+    // Set duty cycle and read
+    servos.forEach(function (thisServo) {
+      testVals.forEach(function (val) {
+        servo.setDutyCycle(thisServo, val, function (err) {
+          t.equal(err, undefined, 'There was an error setting the duty cycle of servo ' + thisServo + ' to ' + pos + ': ' + err);
+          servo.read(thisServo, function (err, data) {
+            t.equal(err, undefined, 'There was an error reading servo ' + thisServo + ': ' + err);
+            t.equal(typeof data, 'number', 'Data read from servo is NaN');
+            t.ok(data >= 0 && data <= 1, 'Invalid data returned');
+            t.ok(data > (val - tolerance) && data < (val + tolerance), 'Servo ' + thisServo + ' has duty cycle ' + data + ' when it should have duty cycle ' + val);
+          });
+        });
       });
     });
   })
