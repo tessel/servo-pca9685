@@ -9,7 +9,7 @@ var servo;
 
 var genArray = function (min, max, interval) {
   var collector = [];
-  for(i = min; i < max + 0.001; i = i + interval) {
+  for (var i = min; i < max + 0.001; i = i + interval) {
     collector.push(i);
   }
   return collector;
@@ -18,7 +18,7 @@ var genArray = function (min, max, interval) {
 var genRandArray = function (num, scale) {
   // num: how many; scale: 0-X
   var collector = [];
-  for (i = 0; i < num; i++) {
+  for (var i = 0; i < num; i++) {
     var item = Math.random();
     if (scale) {
       item = item  * scale;
