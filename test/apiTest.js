@@ -62,7 +62,7 @@ async.series([
   // Methods
   test('configure', function (t) {
     var testArraySize = 5;
-    var minPWMs = genRandArray(testArraySize );
+    var minPWMs = genRandArray(testArraySize);
     var maxPWMs = genRandArray(testArraySize);
     var count = 0;
     var total = servos.length * minPWMs.length;
@@ -82,8 +82,8 @@ async.series([
           // Configure back to a good range for our servos
           servo.configure(thisServo, 0.0275, 0.1225, function (err) {
             t.equal(err, undefined, 'There was an error configuring servo ' + thisServo + ' to [min, max] [' + minPWM + ', ' + maxPWM + ']: ' + err);
-            count ++;
-            if(count === total) {
+            count++;
+            if (count === total) {
               t.end();
             }
           });
@@ -107,8 +107,8 @@ async.series([
             // Should error
             t.ok(err !== undefined, 'Silent failure of out-of-range position for servo ' + thisServo + ' to position ' + position);
           }
-          count ++;
-          if(count === total) {
+          count++;
+          if (count === total) {
             t.end();
           }
         });
@@ -125,7 +125,7 @@ async.series([
         t.equal(typeof data, 'number', 'Data read from servo is NaN');
         t.ok(data >= 0 && data <= 1, 'Invalid data returned');
         count++;
-        if(count === total) {
+        if (count === total) {
           t.end();
         }
       });
@@ -141,7 +141,7 @@ async.series([
         servo.setDutyCycle(thisServo, dutyCycle, function (err) {
           t.equal(err, undefined, 'There was an error setting the duty cycle of servo ' + thisServo + ' to ' + dutyCycle + ': ' + err);
           count++;
-          if(count === total) {
+          if (count === total) {
             t.end();
           }
         });
@@ -157,7 +157,7 @@ async.series([
       servo.setModuleFrequency(freq, function (err) {
         t.equal(err, undefined, 'There was an error setting the module frequency to ' + freq + ': ' + err);
         count++;
-        if(count === total) {
+        if (count === total) {
           // Make sure we leave the module frequency at 50 to work with our servos.
           servo.setModuleFrequency(50, function (err) {
             t.end();
