@@ -1,5 +1,5 @@
-var test = require('ttt');
-
+var test = require('tinytap');
+test.count(361);
 var async = require('async');
 
 var portname = process.argv[2] || 'A';
@@ -12,7 +12,7 @@ var genArray = function (min, max, interval) {
   for(i = min; i < max + 0.001; i = i + interval) {
     collector.push(i);
   }
-  return(collector);
+  return collector;
 };
 
 var genRandArray = function (num, scale) {
@@ -46,6 +46,7 @@ async.series([
       }, timeout);
       servo.on('ready', function () {
         clearTimeout(readyTimer);
+        servo.removeAllListeners('ready');
         t.ok(true, 'ready was emitted');
         t.end();
       });
@@ -58,7 +59,7 @@ async.series([
     });
   }),
   
-  // // Methods
+  // Methods
   test('configure', function (t) {
     var testArraySize = 5;
     var minPWMs = genRandArray(testArraySize );
@@ -82,7 +83,7 @@ async.series([
           servo.configure(thisServo, 0.0275, 0.1225, function (err) {
             t.equal(err, undefined, 'There was an error configuring servo ' + thisServo + ' to [min, max] [' + minPWM + ', ' + maxPWM + ']: ' + err);
             count ++;
-            if(count == total) {
+            if(count === total) {
               t.end();
             }
           });
@@ -107,7 +108,7 @@ async.series([
             t.ok(err !== undefined, 'Silent failure of out-of-range position for servo ' + thisServo + ' to position ' + position);
           }
           count ++;
-          if(count == total) {
+          if(count === total) {
             t.end();
           }
         });
@@ -124,7 +125,7 @@ async.series([
         t.equal(typeof data, 'number', 'Data read from servo is NaN');
         t.ok(data > 0 && data < 1, 'Invalid data returned');
         count++;
-        if(count == total) {
+        if(count === total) {
           t.end();
         }
       });
@@ -140,7 +141,7 @@ async.series([
         servo.setDutyCycle(thisServo, dutyCycle, function (err) {
           t.equal(err, undefined, 'There was an error setting the duty cycle of servo ' + thisServo + ' to ' + dutyCycle + ': ' + err);
           count++;
-          if(count == total) {
+          if(count === total) {
             t.end();
           }
         });
@@ -156,7 +157,7 @@ async.series([
       servo.setModuleFrequency(freq, function (err) {
         t.equal(err, undefined, 'There was an error setting the module frequency to ' + freq + ': ' + err);
         count++;
-        if(count == total) {
+        if(count === total) {
           t.end();
         }
       });

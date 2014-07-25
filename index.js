@@ -172,8 +172,9 @@ servoController.prototype.configure = function (index, low, high, callback) {
       Callback
   */
   if(low >= high) {
-    callback(new Error('Minimum PWM must be smaller than maximum PWM.'));
-    return;
+    var err = new Error('Minimum PWM must be smaller than maximum PWM.');
+    callback(err);
+    return err;
   }
   
   this.servoConfigurations[index] = [low, high];
@@ -326,7 +327,7 @@ servoController.prototype.setModuleFrequency = function (freq, callback) {
   self._readRegister(MODE1, function (err, oldMode) {
     if (err) {
       callback && callback(err, null);
-      return;
+      return err;
     }
     var newMode = oldMode | 0x10;
     var registers = [MODE1, PRE_SCALE, MODE1, MODE1];
