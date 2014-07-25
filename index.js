@@ -114,8 +114,7 @@ servoController.prototype._chainWrite = function(registers, data, callback) {
     if (callback) {
       callback();
     }
-  }
-  else {
+  } else {
     self.i2c.send(new Buffer([registers[0], data[0]]), function() {
       self._chainWrite(registers.slice(1), data.slice(1), callback);
     });
@@ -172,9 +171,15 @@ servoController.prototype.configure = function (index, low, high, callback) {
     callback
       Callback
   */
+  if(low >= high) {
+    var err = new Error('Minimum PWM must be smaller than maximum PWM.');
+    callback(err);
+    return err;
+  }
+  
   this.servoConfigurations[index] = [low, high];
   if (callback) {
-    callback();
+    callback(null);
   }
 };
 
@@ -190,7 +195,19 @@ servoController.prototype.move = function (index, val, callback) {
       Callback
   */
   if (index < 1 || index > 16) {
-    throw 'Servos are 1-indexed. Servos can be between 1-16.';
+    var err = new Error('Servos are 1-indexed. Servos can be between 1-16.');
+    if(callback) {
+      callback(err);
+    }
+    return err;
+  }
+  
+  if (val < 0 || val > 1) {
+    var err = new Error('Invalid position. Value must be between 0 and 1');
+    if(callback) {
+      callback(err);
+    }
+    return err;
   }
 
   //  If unconfigured, use the controller's default values
@@ -226,7 +243,7 @@ servoController.prototype.read = function (servo, callback) {
   */
   if (!this.servoConfigurations[servo]) {
     if (callback) {
-      callback(new Error('servo not configured'), null);
+      callback(new Error('Unconfigured servo cannot have a defined position. Configure your servo before reading.'), null);
     }
   }
 
@@ -264,7 +281,19 @@ servoController.prototype.setDutyCycle = function (index, on, callback) {
   */
 
   if (index < 1 || index > 16) {
-    throw 'Servos are 1-indexed. Servos can be between 1-16.';
+    var err = new Error('Servos are 1-indexed. Servos can be between 1-16.');
+    if(callback) {
+      callback(err);
+    }
+    return err;
+  }
+  
+  if (on < 0 || on > 1) {
+    var err = new Error('Invalid duty cycle. Value must be between 0 and 1');
+    if(callback) {
+      callback(err);
+    }
+    return err;
   }
 
   var convertOn = 0;
@@ -298,7 +327,7 @@ servoController.prototype.setModuleFrequency = function (freq, callback) {
   self._readRegister(MODE1, function (err, oldMode) {
     if (err) {
       callback && callback(err, null);
-      return;
+      return err;
     }
     var newMode = oldMode | 0x10;
     var registers = [MODE1, PRE_SCALE, MODE1, MODE1];
