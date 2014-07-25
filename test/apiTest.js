@@ -114,24 +114,22 @@ async.series([
       });
     });
   }),
-  // 
-  // test('read', function (t) {
-  //   var total = servos.length;
-  //   var count = 0;
-  //   servos.forEach(function (thisServo) {
-  //     console.log(thisServo);
-  //     servo.read(thisServo, function (err, data) {
-  //       console.log(err, undefined, 'There was an error reading servo ' + thisServo + ': ' + err);
-  //       console.log(data);
-  //       t.equal(typeof data, number, 'Data read from servo is NaN');
-  //       t.ok(data > 0 && data < 1, 'Invalid data returned');
-  //       count++;
-  //       if(count == total) {
-  //         t.end();
-  //       }
-  //     });
-  //   });
-  // }),
+  
+  test('read', function (t) {
+    var total = servos.length;
+    var count = 0;
+    servos.forEach(function (thisServo) {
+      servo.read(thisServo, function (err, data) {
+        t.equal(err, undefined, 'There was an error reading servo ' + thisServo + ': ' + err);
+        t.equal(typeof data, 'number', 'Data read from servo is NaN');
+        t.ok(data > 0 && data < 1, 'Invalid data returned');
+        count++;
+        if(count == total) {
+          t.end();
+        }
+      });
+    });
+  }),
   
   test('setDutyCycle', function (t) {
     var dutyCycles = genArray(0, 1, 0.2); // Array of duty cycles from 0 to 1, by .1
