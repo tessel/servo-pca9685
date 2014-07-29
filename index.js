@@ -171,7 +171,7 @@ servoController.prototype.configure = function (index, low, high, callback) {
     callback
       Callback
   */
-  if(low >= high) {
+  if (low >= high) {
     var err = new Error('Minimum PWM must be smaller than maximum PWM.');
     callback(err);
     return err;
@@ -196,7 +196,7 @@ servoController.prototype.move = function (index, val, callback) {
   */
   if (index < 1 || index > 16) {
     var err = new Error('Servos are 1-indexed. Servos can be between 1-16.');
-    if(callback) {
+    if (callback) {
       callback(err);
     }
     return err;
@@ -204,7 +204,7 @@ servoController.prototype.move = function (index, val, callback) {
   
   if (val < 0 || val > 1) {
     var err = new Error('Invalid position. Value must be between 0 and 1');
-    if(callback) {
+    if (callback) {
       callback(err);
     }
     return err;
@@ -282,7 +282,7 @@ servoController.prototype.setDutyCycle = function (index, on, callback) {
 
   if (index < 1 || index > 16) {
     var err = new Error('Servos are 1-indexed. Servos can be between 1-16.');
-    if(callback) {
+    if (callback) {
       callback(err);
     }
     return err;
@@ -290,7 +290,7 @@ servoController.prototype.setDutyCycle = function (index, on, callback) {
   
   if (on < 0 || on > 1) {
     var err = new Error('Invalid duty cycle. Value must be between 0 and 1');
-    if(callback) {
+    if (callback) {
       callback(err);
     }
     return err;
