@@ -183,6 +183,42 @@ servoController.prototype.configure = function (index, low, high, callback) {
   }
 };
 
+// Get the PWM max and min for the specified servo
+servoController.prototype.getConfiguration = function (index, callback) {
+  /**
+  Args
+    index
+      index of servo configuration to read. NOTE: 1-indexed
+    callback
+      Callback
+
+  Callback parameters
+    err
+      null
+    config
+      An array with the following contents:
+        0 - low
+          PWM lower bound (PWM value for move(index, 0))
+        1 - high
+          PWM upper bound (PWM value for move(index, 1))
+
+  Returns
+    config
+      as described above
+  */
+  if (!this.servoConfigurations[index]) {
+    if (callback) {
+      callback(new Error('Specified servo channel has not been configured'), null);
+    }
+    return new Error('Specified servo channel has not been configured');
+  } else {
+    if (callback) {
+      callback(null, this.servoConfigurations[index]);
+    }
+    return this.servoConfigurations[index];
+  }
+};
+
 // Sets the position of the specified servo
 servoController.prototype.move = function (index, val, callback) {
   /**
