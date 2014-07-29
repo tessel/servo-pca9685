@@ -177,11 +177,12 @@ async.series([
   // 400 + 400 subtests = 800 subtests
   test('move, setDutyCycle, and read', function (t) {
     var testVals = genRandArray(5);
-    var tolerance = 0.5; // This is a huge tolerance.
+    var tolerance = 0.1; // This is a huge tolerance.
     var count = 0;
     var total = servos.length * testVals.length * 2;
     // Move and read
     servos.forEach(function (thisServo) {
+      servo.configure(thisServo, 0, 1);
       testVals.forEach(function (val) {
         servo.move(thisServo, val, function (err) {
           t.equal(err, undefined, 'There was an error moving servo ' + thisServo + ' to position ' + pos + ': ' + err);
