@@ -301,7 +301,6 @@ servoController.prototype.read = function (servo, callback) {
     var low = self.servoConfigurations[servo][0];
     var high = self.servoConfigurations[servo][1];
     var specificMaxDuty = (high - low);
-                                        //  empirically determined fudge factors
     if (callback) {
       callback(null, (duty - low) / specificMaxDuty);
     }
