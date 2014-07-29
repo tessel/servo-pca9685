@@ -326,7 +326,9 @@ servoController.prototype.setModuleFrequency = function (freq, callback) {
   var self = this;
   self._readRegister(MODE1, function (err, oldMode) {
     if (err) {
-      callback && callback(err, null);
+      if (callback) {
+        callback(err, null);
+      }
       return err;
     }
     var newMode = oldMode | 0x10;
