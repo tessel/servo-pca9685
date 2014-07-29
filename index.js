@@ -173,7 +173,9 @@ servoController.prototype.configure = function (index, low, high, callback) {
   */
   if (low >= high) {
     var err = new Error('Minimum PWM must be smaller than maximum PWM.');
-    callback(err);
+    if (callback) {
+      callback(err);
+    }
     return err;
   }
   
