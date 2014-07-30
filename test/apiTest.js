@@ -13,7 +13,7 @@ var genArray = function (min, max, interval) {
     collector.push(i);
   }
   return collector;
-};  
+};
 
 var genRandArray = function (num, scale) {
   // num: how many; scale: 0-X
@@ -21,7 +21,7 @@ var genRandArray = function (num, scale) {
   for (var i = 0; i < num; i++) {
     var item = Math.random();
     if (scale) {
-      item = item  * scale;
+      item = item * scale;
     }
     collector.push(item);
   }

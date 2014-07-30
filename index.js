@@ -86,7 +86,7 @@ servoController.prototype._chainRead = function (registers, callback, replies) {
     }
   }
   else {
-    self.i2c.transfer(new Buffer([registers[0]]), 1, function(err, data) {
+    self.i2c.transfer(new Buffer([registers[0]]), 1, function (err, data) {
       if (err) {
         if (callback) {
           callback(err, replies);
@@ -99,7 +99,7 @@ servoController.prototype._chainRead = function (registers, callback, replies) {
 };
 
 // Makes multiple writes to the PCA9685's registers via I2C
-servoController.prototype._chainWrite = function(registers, data, callback) {
+servoController.prototype._chainWrite = function (registers, data, callback) {
   /**
   Args
     registers
@@ -115,7 +115,7 @@ servoController.prototype._chainWrite = function(registers, data, callback) {
       callback();
     }
   } else {
-    self.i2c.send(new Buffer([registers[0], data[0]]), function() {
+    self.i2c.send(new Buffer([registers[0], data[0]]), function () {
       self._chainWrite(registers.slice(1), data.slice(1), callback);
     });
   }
@@ -290,7 +290,7 @@ servoController.prototype.read = function (servo, callback) {
     LED0_ON_H + (servo - 1) * 4,
     LED0_OFF_L + (servo - 1) * 4,
     LED0_OFF_H + (servo - 1) * 4];
-  self._chainRead(registers, function(err, replies) {
+  self._chainRead(registers, function (err, replies) {
     //  When in the count cycle the pin goes high
     var on = replies[0] + (replies[1] << 8);
     //  When it goes low
@@ -399,17 +399,17 @@ function use (hardware, low, high, callback) {
   }
 
   var servos = new servoController(hardware, low, high);
-  servos.setModuleFrequency(50, function(err) {
+  servos.setModuleFrequency(50, function (err) {
     if (!err) {
       servos._connected = true;
-      setImmediate(function() {
+      setImmediate(function () {
         servos.emit('ready');
       });
       if (callback) {
         callback(null, servos);
       }
     } else {
-      setImmediate(function() {
+      setImmediate(function () {
         servos.emit('error', err);
       });
       if (callback) {
