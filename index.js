@@ -295,21 +295,21 @@ servoController.prototype.read = function (servo, callback) {
     var on = replies[0] + (replies[1] << 8);
     //  When it goes low
     var off = replies[2] + (replies[3] << 8);
-    //  Effective duty cycle
-    var duty = (off - on) / MAX;
+    //  Duty cycle with no phase shift
+    var currentDuty = (off - on) / MAX;
 
     var low = self.servoConfigurations[servo][0];
     var high = self.servoConfigurations[servo][1];
-    var specificMaxDuty = (high - low);
+    var range = (high - low);
 
-    if ((duty - low) / specificMaxDuty < 0 || (duty - low) / specificMaxDuty > 1) {
-      console.log(servo, on, off, low, high, specificMaxDuty, (duty-low));
+    if ((currentDuty - low) / range < 0 || (currentDuty - low) / range > 1) {
+      console.log(servo, on, off, low, high, range, (currentDuty-low));
     }
 
     if (callback) {
-      callback(null, (duty - low) / specificMaxDuty);
+      callback(null, (currentDuty - low) / range);
     }
-    return (duty - low) / specificMaxDuty; 
+    return (currentDuty - low) / range; 
   });
 };
 
