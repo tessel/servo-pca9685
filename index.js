@@ -86,7 +86,7 @@ servoController.prototype._chainRead = function (registers, callback, replies) {
     }
   }
   else {
-    self.i2c.transfer(new Buffer([registers[0]]), 1, function(err, data) {
+    self.i2c.transfer(new Buffer([registers[0]]), 1, function (err, data) {
       if (err) {
         if (callback) {
           callback(err, replies);
@@ -99,7 +99,7 @@ servoController.prototype._chainRead = function (registers, callback, replies) {
 };
 
 // Makes multiple writes to the PCA9685's registers via I2C
-servoController.prototype._chainWrite = function(registers, data, callback) {
+servoController.prototype._chainWrite = function (registers, data, callback) {
   /**
   Args
     registers
@@ -115,7 +115,7 @@ servoController.prototype._chainWrite = function(registers, data, callback) {
       callback();
     }
   } else {
-    self.i2c.send(new Buffer([registers[0], data[0]]), function() {
+    self.i2c.send(new Buffer([registers[0], data[0]]), function () {
       self._chainWrite(registers.slice(1), data.slice(1), callback);
     });
   }
@@ -171,15 +171,53 @@ servoController.prototype.configure = function (index, low, high, callback) {
     callback
       Callback
   */
-  if(low >= high) {
+  if (low >= high) {
     var err = new Error('Minimum PWM must be smaller than maximum PWM.');
-    callback(err);
+    if (callback) {
+      callback(err);
+    }
     return err;
   }
   
   this.servoConfigurations[index] = [low, high];
   if (callback) {
     callback(null);
+  }
+};
+
+// Get the PWM max and min for the specified servo
+servoController.prototype.getConfiguration = function (index, callback) {
+  /**
+  Args
+    index
+      index of servo configuration to read. NOTE: 1-indexed
+    callback
+      Callback
+
+  Callback parameters
+    err
+      null
+    config
+      An array with the following contents:
+        0 - low
+          PWM lower bound (PWM value for move(index, 0))
+        1 - high
+          PWM upper bound (PWM value for move(index, 1))
+
+  Returns
+    config
+      as described above
+  */
+  if (!this.servoConfigurations[index]) {
+    if (callback) {
+      callback(new Error('Specified servo channel has not been configured'), null);
+    }
+    return new Error('Specified servo channel has not been configured');
+  } else {
+    if (callback) {
+      callback(null, this.servoConfigurations[index]);
+    }
+    return this.servoConfigurations[index];
   }
 };
 
@@ -196,7 +234,7 @@ servoController.prototype.move = function (index, val, callback) {
   */
   if (index < 1 || index > 16) {
     var err = new Error('Servos are 1-indexed. Servos can be between 1-16.');
-    if(callback) {
+    if (callback) {
       callback(err);
     }
     return err;
@@ -204,7 +242,7 @@ servoController.prototype.move = function (index, val, callback) {
   
   if (val < 0 || val > 1) {
     var err = new Error('Invalid position. Value must be between 0 and 1');
-    if(callback) {
+    if (callback) {
       callback(err);
     }
     return err;
@@ -252,19 +290,22 @@ servoController.prototype.read = function (servo, callback) {
     LED0_ON_H + (servo - 1) * 4,
     LED0_OFF_L + (servo - 1) * 4,
     LED0_OFF_H + (servo - 1) * 4];
-  self._chainRead(registers, function(err, replies) {
+  self._chainRead(registers, function (err, replies) {
     //  When in the count cycle the pin goes high
     var on = replies[0] + (replies[1] << 8);
     //  When it goes low
     var off = replies[2] + (replies[3] << 8);
-    //  Effective duty cycle
-    var duty = (off - on) / MAX;
+    //  Duty cycle with no phase shift
+    var currentDuty = (off - on) / MAX;
 
     var low = self.servoConfigurations[servo][0];
     var high = self.servoConfigurations[servo][1];
-    var specificMaxDuty = (high - low);
-                                        //  empirically determined fudge factors
-    callback(null, ((duty - low) / specificMaxDuty + 8 / 4096) * 1023/1024);
+    var range = (high - low);
+
+    if (callback) {
+      callback(null, (currentDuty - low) / range);
+    }
+    return (currentDuty - low) / range; 
   });
 };
 
@@ -282,7 +323,7 @@ servoController.prototype.setDutyCycle = function (index, on, callback) {
 
   if (index < 1 || index > 16) {
     var err = new Error('Servos are 1-indexed. Servos can be between 1-16.');
-    if(callback) {
+    if (callback) {
       callback(err);
     }
     return err;
@@ -290,7 +331,7 @@ servoController.prototype.setDutyCycle = function (index, on, callback) {
   
   if (on < 0 || on > 1) {
     var err = new Error('Invalid duty cycle. Value must be between 0 and 1');
-    if(callback) {
+    if (callback) {
       callback(err);
     }
     return err;
@@ -326,7 +367,9 @@ servoController.prototype.setModuleFrequency = function (freq, callback) {
   var self = this;
   self._readRegister(MODE1, function (err, oldMode) {
     if (err) {
-      callback && callback(err, null);
+      if (callback) {
+        callback(err, null);
+      }
       return err;
     }
     var newMode = oldMode | 0x10;
@@ -356,17 +399,17 @@ function use (hardware, low, high, callback) {
   }
 
   var servos = new servoController(hardware, low, high);
-  servos.setModuleFrequency(50, function(err) {
+  servos.setModuleFrequency(50, function (err) {
     if (!err) {
       servos._connected = true;
-      setImmediate(function() {
+      setImmediate(function () {
         servos.emit('ready');
       });
       if (callback) {
         callback(null, servos);
       }
     } else {
-      setImmediate(function() {
+      setImmediate(function () {
         servos.emit('error', err);
       });
       if (callback) {
