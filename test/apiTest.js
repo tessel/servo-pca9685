@@ -1,5 +1,5 @@
 var test = require('tinytap');
-test.count(3 + 320 + 48 + 48 + 96 + 6 + 800);
+test.count(3 + 320 + 48 + 48 + 96 + 6 + 800 + 400);
 var async = require('async');
 
 var portname = process.argv[2] || 'A';
@@ -174,41 +174,60 @@ async.series([
     });
   }),
   
-  // 400 + 400 subtests = 800 subtests
-  test('move, setDutyCycle, and read', function (t) {
-    var testVals = genRandArray(5);
-    var tolerance = 0.1; // This is a huge tolerance.
-    var count = 0;
-    var total = servos.length * testVals.length * 2;
+  // 800 subtests
+  test('move and read', function (t) {
+    var tolerance = 0.005;
+
     // Move and read
+    // 5 * 16 * 10 = 800
+    var positionsToTry = 10;
+    var theTest = function (servoNumber, positionNumber, servos, positions) {
+      var thisServo = servos[servoNumber];
+      // Normal operational range, give or take
+      servo.configure(thisServo, 0.02, 0.12, function () {
+        var targetPosition = positions[positionNumber];
+        servo.move(thisServo, targetPosition, function (err) {
+          servo.read(thisServo, function (err2, readPosition) {
+            t.equal(err, undefined, 'There was an error moving servo ' + thisServo + ' to position ' + targetPosition + ': ' + err);
+            // console.log(thisServo+'\t'+targetPosition+'\t'+readPosition);
+            t.equal(err2, undefined, 'There was an error reading servo ' + thisServo + ': ' + err2);
+            t.equal(typeof readPosition, 'number', 'Data read from servo is NaN');
+            t.ok(readPosition >= 0 && readPosition <= 1, 'Invalid data returned');
+            t.ok(Math.abs(readPosition - targetPosition) < tolerance, 'Servo ' + thisServo + ' moved to ' + readPosition + ' when it should have moved to ' + targetPosition + '\t' + Math.abs(readPosition - targetPosition));
+
+            // Recursion
+            if (positionNumber + 1 === positions.length && servoNumber + 1 === servos.length) {
+              // Base case! On to the next test.
+            } else if (positionNumber+1 === positions.length) {
+              theTest(servoNumber+1, 0, servos, genRandArray(positions.length));
+            } else {
+              theTest(servoNumber, positionNumber+1, servos, genRandArray(positions.length));
+            }
+          });
+        });
+      });
+    };
+    theTest(0, 0, servos, genRandArray(positionsToTry));
+  }), 
+
+  // 400 subtests
+  test('setDutyCycle and read', function (t) {
+    var positionsToTry = 5;
     servos.forEach(function (thisServo) {
-      servo.configure(thisServo, 0, 1);
-      testVals.forEach(function (val) {
-        servo.move(thisServo, val, function (err) {
-          t.equal(err, undefined, 'There was an error moving servo ' + thisServo + ' to position ' + pos + ': ' + err);
-          servo.read(thisServo, function (err, data) {
-            t.equal(err, undefined, 'There was an error reading servo ' + thisServo + ': ' + err);
-            t.equal(typeof data, 'number', 'Data read from servo is NaN');
-            t.ok(data >= 0 && data <= 1, 'Invalid data returned');
-            t.ok(data > (val - tolerance) && data < (val + tolerance), 'Servo ' + thisServo + ' moved to ' + data + ' when it should have moved to ' + val);
+      genRandArray(positionsToTry).forEach(function (val) {
+        servo.configure(thisServo, 0, 1, function () {
+          servo.setDutyCycle(thisServo, val, function (err) {
+            t.equal(err, undefined, 'There was an error setting the duty cycle of servo ' + thisServo + ' to ' + val + ': ' + err);
+            servo.read(thisServo, function (err, data) {
+              t.equal(err, undefined, 'There was an error reading servo ' + thisServo + ': ' + err);
+              t.equal(typeof data, 'number', 'Data read from servo is NaN');
+              t.ok(data >= 0 && data <= 1, 'Invalid data returned');
+              t.ok(data > (val - tolerance) && data < (val + tolerance), 'Servo ' + thisServo + ' has duty cycle ' + data + ' when it should have duty cycle ' + val);
+            });
           });
         });
       });
     });
-    // Set duty cycle and read
-    servos.forEach(function (thisServo) {
-      testVals.forEach(function (val) {
-        servo.setDutyCycle(thisServo, val, function (err) {
-          t.equal(err, undefined, 'There was an error setting the duty cycle of servo ' + thisServo + ' to ' + pos + ': ' + err);
-          servo.read(thisServo, function (err, data) {
-            t.equal(err, undefined, 'There was an error reading servo ' + thisServo + ': ' + err);
-            t.equal(typeof data, 'number', 'Data read from servo is NaN');
-            t.ok(data >= 0 && data <= 1, 'Invalid data returned');
-            t.ok(data > (val - tolerance) && data < (val + tolerance), 'Servo ' + thisServo + ' has duty cycle ' + data + ' when it should have duty cycle ' + val);
-          });
-        });
-      });
-    });
-  })
+  }),
   
-  ]);
+]);
