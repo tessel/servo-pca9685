@@ -303,7 +303,7 @@ servoController.prototype.read = function (servo, callback) {
     var specificMaxDuty = (high - low);
 
     if ((duty - low) / specificMaxDuty < 0 || (duty - low) / specificMaxDuty > 1) {
-      console.log(low + '\t' + high + '\t' + specificMaxDuty + '\t' + duty-low);
+      console.log(low, high, specificMaxDuty, (duty-low));
     }
 
     if (callback) {
