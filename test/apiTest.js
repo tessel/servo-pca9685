@@ -104,7 +104,7 @@ async.series([
       positions.forEach(function (position) {
         servo.move(thisServo, position, function (err) {
           // Make sure errors get caught properly
-          if (position >= 0 && position <= 1) {
+          if (position >= -0.000245 && position <= 1.000245) {
             // Shouldn't error
             t.equal(err, undefined, 'There was an error moving servo ' + thisServo + ' to position ' + pos + ': ' + err);
           } else {
@@ -128,7 +128,7 @@ async.series([
       servo.read(thisServo, function (err, data) {
         t.equal(err, undefined, 'There was an error reading servo ' + thisServo + ': ' + err);
         t.equal(typeof data, 'number', 'Data read from servo is NaN');
-        t.ok(data >= 0 && data <= 1, 'Invalid data returned');
+        t.ok(data >= -0.000245 && data <= 1.000245, 'Invalid data returned:\t' + data);
         count++;
         if (count === total) {
           t.end();
@@ -192,16 +192,16 @@ async.series([
             // console.log(thisServo+'\t'+targetPosition+'\t'+readPosition);
             t.equal(err2, undefined, 'There was an error reading servo ' + thisServo + ': ' + err2);
             t.equal(typeof readPosition, 'number', 'Data read from servo is NaN');
-            t.ok(readPosition >= 0 && readPosition <= 1, 'Invalid data returned');
+            t.ok(readPosition >= -0.000245 && readPosition <= 1.000245, 'Invalid data returned');
             t.ok(Math.abs(readPosition - targetPosition) < tolerance, 'Servo ' + thisServo + ' moved to ' + readPosition + ' when it should have moved to ' + targetPosition + '\t' + Math.abs(readPosition - targetPosition));
 
             // Recursion
             if (positionNumber + 1 === positions.length && servoNumber + 1 === servos.length) {
               t.end();
-            } else if (positionNumber+1 === positions.length) {
-              theTest(servoNumber+1, 0, servos, genRandArray(positions.length));
+            } else if (positionNumber + 1 === positions.length) {
+              theTest(servoNumber + 1, 0, servos, genRandArray(positions.length));
             } else {
-              theTest(servoNumber, positionNumber+1, servos, genRandArray(positions.length));
+              theTest(servoNumber, positionNumber + 1, servos, genRandArray(positions.length));
             }
           });
         });
@@ -228,16 +228,16 @@ async.series([
             // console.log(thisServo+'\t'+targetPosition+'\t'+readPosition);
             t.equal(err2, undefined, 'There was an error reading servo ' + thisServo + ': ' + err2);
             t.equal(typeof readPosition, 'number', 'Data read from servo is NaN');
-            t.ok(readPosition >= 0 && readPosition <= 1, 'Invalid data returned');
+            t.ok(readPosition >= -0.000245 && readPosition <= 1.000245, 'Invalid data returned');
             t.ok(Math.abs(readPosition - targetPosition) < tolerance, 'Servo ' + thisServo + ' duty cycle set to ' + readPosition + ' when it should have been set to ' + targetPosition + '\t' + Math.abs(readPosition - targetPosition));
 
             // Recursion
             if (positionNumber + 1 === positions.length && servoNumber + 1 === servos.length) {
               t.end();
-            } else if (positionNumber+1 === positions.length) {
-              theTest(servoNumber+1, 0, servos, genRandArray(positions.length));
+            } else if (positionNumber + 1 === positions.length) {
+              theTest(servoNumber + 1, 0, servos, genRandArray(positions.length));
             } else {
-              theTest(servoNumber, positionNumber+1, servos, genRandArray(positions.length));
+              theTest(servoNumber, positionNumber + 1, servos, genRandArray(positions.length));
             }
           });
         });
