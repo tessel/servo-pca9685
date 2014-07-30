@@ -1,5 +1,5 @@
 var test = require('tinytap');
-test.count(3 + 320 + 48 /*+ 48 */+ 96 + 6 + 800 + 800);
+test.count(3 + 320 + 48 + 96 + 6 + 800 + 800);
 var async = require('async');
 
 var portname = process.argv[2] || 'A';
@@ -119,23 +119,6 @@ async.series([
       });
     });
   }),
-  
-  // // 48 subtests
-  // test('read', function (t) {
-  //   var total = servos.length;
-  //   var count = 0;
-  //   servos.forEach(function (thisServo) {
-  //     servo.read(thisServo, function (err, data) {
-  //       t.equal(err, undefined, 'There was an error reading servo ' + thisServo + ': ' + err);
-  //       t.equal(typeof data, 'number', 'Data read from servo is NaN');
-  //       t.ok(data >= -0.000245 && data <= 1.000245, 'Invalid data returned:\t' + data);
-  //       count++;
-  //       if (count === total) {
-  //         t.end();
-  //       }
-  //     });
-  //   });
-  // }),
   
   // 96 subtests
   test('setDutyCycle', function (t) {

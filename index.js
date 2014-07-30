@@ -302,10 +302,6 @@ servoController.prototype.read = function (servo, callback) {
     var high = self.servoConfigurations[servo][1];
     var range = (high - low);
 
-    if ((currentDuty - low) / range < 0 || (currentDuty - low) / range > 1) {
-      console.log(servo, on, off, low, high, range, (currentDuty-low));
-    }
-
     if (callback) {
       callback(null, (currentDuty - low) / range);
     }
