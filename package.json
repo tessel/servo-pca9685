@@ -1,6 +1,6 @@
 {
   "name": "servo-pca9685",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Library to run the PCA9685 PWM driver.",
   "main": "index.js",
   "scripts": {
