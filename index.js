@@ -105,7 +105,7 @@ servoController.prototype._chainWrite = function (registers, data, callback) {
     registers
       An array of register addresses
     data
-      Ana array of data payloads
+      An array of data payloads
     callback
       Callback
   */
