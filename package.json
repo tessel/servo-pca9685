@@ -8,7 +8,7 @@
   },
   "repository": "tessel/servo-pca9685",
   "author": "Jia Huang <jia@technical.io>",
-  "license": "MIT",
+  "license": "(MIT or Apache-2.0)",
   "readmeFilename": "README.md",
   "directories": {
     "example": "examples"
